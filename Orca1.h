@@ -8,16 +8,35 @@ const int kNumPresets = 1;
 enum EParams
 {
   kParamGain = 0,
-  kParamNoteGlideTime,
-  kParamAttack,
-  kParamDecay,
-  kParamSustain,
-  kParamRelease,
-  kParamLFOShape,
-  kParamLFORateHz,
-  kParamLFORateTempo,
-  kParamLFORateMode,
-  kParamLFODepth,
+  kParamTune,
+  kParamVolume,
+  kParamPortamento,
+  kParamPortamentoType, // auto, off, on
+  kParamLFORate,
+  kParamLFOWaveform, // tri, square, random, noise
+  kParamLFOBend, // what is this?
+  kParamVCOMod,
+  kParamVCORange, // 16,8,4,2
+  kParamVCOBend,
+  kParamPulseWidth,
+  kParamPulseSource, // lfo, manual, env
+  kParamMixerPulse,
+  kParamMixerSaw,
+  kParamMixerSub,
+  kParamSubType, // 1 oct down square, 2 oct down square, 2 oct down pulse
+  kParamMixerNoise,
+  kParamVCFFreq,
+  kParamVCFResonanse,
+  kParamVCFEnv,
+  kParamVCFMod,
+  kParamVCFKeyboard,
+  kParamVCFBend,
+  kParamVCAType, // env/gate
+  kParamEnvAttack,
+  kParamEnvDecay,
+  kParamEnvSustain,
+  kParamEnvRelease,
+  
   kNumParams
 };
 
