@@ -170,17 +170,21 @@ Orca1::Orca1(const InstanceInfo& info)
 //    kParamVCFBend,
     pGraphics->AttachControl(new IVKnobControl(b.GetCentredInside(70).GetHShifted(-90).GetVShifted(140), kParamVCFBend, "Bend",
                                                DEFAULT_STYLE.WithShowValue(false)));
+    
+    // make a rect thats in the 2nd cell of a grid of the display that's 2x2
+    // then add 4 countrol each in the centre of a 4x1 grid within that rect
+    const IRECT adsrControls = b.GetGridCell(1, 2, 2);
 //    kParamEnvAttack,
-    pGraphics->AttachControl(new IVKnobControl(b.GetCentredInside(70).GetHShifted(-20).GetVShifted(-210), kParamEnvAttack, "Attack",
+    pGraphics->AttachControl(new IVKnobControl(adsrControls.GetGridCell(0, 1, 4).GetCentredInside(70), kParamEnvAttack, "Attack",
                                                DEFAULT_STYLE.WithShowValue(false)));
 //    kParamEnvDecay,
-    pGraphics->AttachControl(new IVKnobControl(b.GetCentredInside(70).GetHShifted(-20).GetVShifted(-140), kParamEnvDecay, "Decay",
+    pGraphics->AttachControl(new IVKnobControl(adsrControls.GetGridCell(1, 1, 4).GetCentredInside(70), kParamEnvDecay, "Decay",
                                                DEFAULT_STYLE.WithShowValue(false)));
 //    kParamEnvSustain,
-    pGraphics->AttachControl(new IVKnobControl(b.GetCentredInside(70).GetHShifted(-20).GetVShifted(-70), kParamEnvSustain, "Sustain",
+    pGraphics->AttachControl(new IVKnobControl(adsrControls.GetGridCell(2, 1, 4).GetCentredInside(70), kParamEnvSustain, "Sustain",
                                                DEFAULT_STYLE.WithShowValue(false)));
 //    kParamEnvRelease,
-    pGraphics->AttachControl(new IVKnobControl(b.GetCentredInside(70).GetHShifted(-20).GetVShifted(0), kParamEnvRelease, "Release",
+    pGraphics->AttachControl(new IVKnobControl(adsrControls.GetGridCell(3, 1, 4).GetCentredInside(70), kParamEnvRelease, "Release",
                                                DEFAULT_STYLE.WithShowValue(false)));
     
     // pGraphics->AttachControl(new IVKnobControl(controls.GetGridCell(0, 2, 2, 3).GetCentredInside(60), kParamPortamentoType, "Mode"), kNoTag, "Portamento")->DisablePrompt(false);
