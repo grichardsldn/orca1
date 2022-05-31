@@ -4,16 +4,16 @@
 Orca1::Orca1(const InstanceInfo& info)
 : Plugin(info, MakeConfig(kNumParams, kNumPresets))
 {
-  GetParam(kParamGain)->InitDouble("Volume", 100., 0., 100.0, 0.01, "");
+  GetParam(kParamGain)->InitDouble("Volume", 80, 0., 100.0, 0.01, "");
   GetParam(kParamPortamentoType)->InitEnum("P-Mode", 0, {"Auto", "Off", "On"} );
   GetParam(kParamLFOWaveform)->InitEnum("LFOWaveform", 0, {"Triangle", "Square", "Random", "Noise"} );
   GetParam(kParamVCORange)->InitEnum("Range", 0, {"16", "8", "4", "2"} );
-  GetParam(kParamPulseSource)->InitEnum("PWMSource", 0, {"LFO", "Manual", "Env"} );
+  GetParam(kParamPulseSource)->InitEnum("Source", 0, {"LFO", "Manual", "Env"} );
   GetParam(kParamSubType)->InitEnum("Sub", 0, {"1 Oct sq", "2 Oct sq", "2 oct pulse"} );
   GetParam(kParamVCAType)->InitEnum("Amp", 0, {"Env", "Gate"} );
-  
+  GetParam(kParamVCOMode)->InitEnum("Mode", 0, {"Poly", "Mono"} );
 //  kParamPortamento,
-  GetParam(kParamPortamento)->InitDouble("Glide", 100., 0., 100.0, 0.01, "");
+  GetParam(kParamPortamento)->InitDouble("Glide", 0., 0., 100.0, 0.01, "");
   
 //  kParamLFORate,
   GetParam(kParamLFORate)->InitDouble("LFO", 100., 0., 100.0, 0.01, "");
@@ -25,7 +25,7 @@ Orca1::Orca1(const InstanceInfo& info)
   GetParam(kParamVCOMod)->InitDouble("Osc mod", 100., 0., 100.0, 0.01, "");
   
 //  kParamVCOBend,
-  GetParam(kParamVCOBend)->InitDouble("Osc bend", 100., 0., 100.0, 0.01, "");
+  GetParam(kParamVCOBend)->InitDouble("Osc bend", 0., 0., 100.0, 0.01, "");
   
 //  kParamPulseWidth,
   GetParam(kParamPulseWidth)->InitDouble("Width", 100., 0., 100.0, 0.01, "%");
@@ -69,6 +69,9 @@ Orca1::Orca1(const InstanceInfo& info)
 //  kParamEnvRelease,
   GetParam(kParamEnvRelease)->InitDouble("Release", 100., 0., 100.0, 0.01, "");
   
+  
+  GetParam(kParamTune)->InitDouble("Tune", 0., -100., 100.0, 0.05, "");
+  
   // GetParam(kParamNoteGlideTime)->InitMilliseconds("Note Glide Time", 0., 0.0, 30.);
   // GetParam(kParamAttack)->InitDouble("Attack", 10., 1., 1000., 0.1, "ms", IParam::kFlagsNone, "ADSR", IParam::ShapePowCurve(3.));
   
@@ -90,7 +93,7 @@ Orca1::Orca1(const InstanceInfo& info)
 
 //    pGraphics->EnableLiveEdit(true);
     pGraphics->LoadFont("Roboto-Regular", ROBOTO_FN);
-    const IRECT b = pGraphics->GetBounds().GetPadded(-20.f);
+    const IRECT b = pGraphics->GetBounds().GetPadded(-10.f);
     // const IRECT lfoPanel = b.GetFromLeft(300.f).GetFromTop(200.f);
     // IRECT keyboardBounds = b.GetFromBottom(300);
     // IRECT wheelsBounds = keyboardBounds.ReduceFromLeft(100.f).GetPadded(-10.f);
@@ -99,107 +102,86 @@ Orca1::Orca1(const InstanceInfo& info)
     // pGraphics->AttachControl(new IWheelControl(wheelsBounds.FracRectHorizontal(0.5, true), IMidiMsg::EControlChangeMsg::kModWheel));
 //    pGraphics->AttachControl(new IVMultiSliderControl<4>(b.GetGridCell(0, 2, 2).GetPadded(-30), "", DEFAULT_STYLE, kParamAttack, EDirection::Vertical, 0.f, 1.f));
     const IRECT controls = b.GetGridCell(0, 8, 8);
+    const IRECT oscControls = b.GetGridCell(0,1,5);
+    const IRECT modControls = b.GetGridCell(1,1,5);
+    const IRECT envControls = b.GetGridCell(2,1,5).GetGridCell(0,2,1);
+    const IRECT mixControls = b.GetGridCell(2,1,5).GetGridCell(1,2,1);
+    const IRECT filterControls = b.GetGridCell(3,1,5);
+    const IRECT outputControls = b.GetGridCell(4,1,5);
+    const int size = 50;
+    // oscControls
+    pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(0,2,5).GetCentredInside(size), kParamVCORange, "Range"), kNoTag, "Range")->DisablePrompt(false);
+    pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(1,2,5).GetCentredInside(size), kParamPortamento, "Glide",
+                                               DEFAULT_STYLE.WithShowValue(false)));
+    pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(2,2,5).GetCentredInside(size), kParamPulseWidth, "Width",
+                                               DEFAULT_STYLE.WithShowValue(false)));
+    pGraphics->AttachControl(new IVRadioButtonControl(oscControls.GetGridCell(3,2,5).GetCentredInside(size), kParamPulseSource, {}, "", DEFAULT_STYLE.WithShowLabel(true)));
+    pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(5,2,5).GetCentredInside(size), kParamVCOBend, "Bend",
+                                               DEFAULT_STYLE.WithShowValue(false)));
+    pGraphics->AttachControl(new IVRadioButtonControl(oscControls.GetGridCell(6,2,5).GetCentredInside(size), kParamPortamentoType, {}, "", DEFAULT_STYLE.WithShowLabel(true)));
+   
+    pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(7,2,5).GetCentredInside(size), kParamVCOMod, "Mod",
+                                               DEFAULT_STYLE.WithShowValue(false)));
+
+    pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(8,2,5).GetCentredInside(size), kParamVCOMode, "Mode"), kNoTag, "Mode")->DisablePrompt(false);
+    
+        
+    // modControls
+    pGraphics->AttachControl(new IVKnobControl(modControls.GetGridCell(0,2,5).GetCentredInside(size), kParamLFORate, "Rate",
+                                               DEFAULT_STYLE.WithShowValue(false)));
+    
+    pGraphics->AttachControl(new IVRadioButtonControl(modControls.GetGridCell(1,2,5).GetCentredInside(size), kParamLFOWaveform, {}, "", DEFAULT_STYLE.WithShowLabel(false)));
+    
+    pGraphics->AttachControl(new IVKnobControl(modControls.GetGridCell(5,2,5).GetCentredInside(size), kParamLFOBend, "Bend",
+                                               DEFAULT_STYLE.WithShowValue(false)));
+
+    // mixControls
+    pGraphics->AttachControl(new IVKnobControl(mixControls.GetGridCell(0,1,5).GetCentredInside(size), kParamMixerPulse, "Pulse",
+                                               DEFAULT_STYLE.WithShowValue(false)));
+    pGraphics->AttachControl(new IVKnobControl(mixControls.GetGridCell(1,1,5).GetCentredInside(size), kParamMixerSaw, "Saw",
+                                               DEFAULT_STYLE.WithShowValue(false)));
+    pGraphics->AttachControl(new IVKnobControl(mixControls.GetGridCell(2,1,5).GetCentredInside(size), kParamMixerSub, "Sub",
+                                               DEFAULT_STYLE.WithShowValue(false)));
+    pGraphics->AttachControl(new IVKnobControl(mixControls.GetGridCell(3,1,5).GetCentredInside(size), kParamMixerNoise, "Noise",
+                                                DEFAULT_STYLE.WithShowValue(false)));
+    
+    pGraphics->AttachControl(new IVRadioButtonControl(mixControls.GetGridCell(4,1,5).GetCentredInside(size), kParamSubType, {}, "", DEFAULT_STYLE.WithShowLabel(true)));
+                 
+    // env controls
+    pGraphics->AttachControl(new IVKnobControl(envControls.GetGridCell(0,1,5).GetCentredInside(size), kParamEnvAttack, "Attack",
+                                               DEFAULT_STYLE.WithShowValue(false)));
+    pGraphics->AttachControl(new IVKnobControl(envControls.GetGridCell(1,1,5).GetCentredInside(size), kParamEnvDecay, "Decay",
+                                               DEFAULT_STYLE.WithShowValue(false)));
+    pGraphics->AttachControl(new IVKnobControl(envControls.GetGridCell(2,1,5).GetCentredInside(size), kParamEnvSustain, "Sustain",
+                                               DEFAULT_STYLE.WithShowValue(false)));
+    pGraphics->AttachControl(new IVKnobControl(envControls.GetGridCell(3,1,5).GetCentredInside(size), kParamEnvRelease, "Release",
+                                               DEFAULT_STYLE.WithShowValue(false)));
+    
+    // filterControls
+    pGraphics->AttachControl(new IVKnobControl(filterControls.GetGridCell(0,2,5).GetCentredInside(size), kParamVCFFreq, "Freq",
+                                               DEFAULT_STYLE.WithShowValue(false)));
+    pGraphics->AttachControl(new IVKnobControl(filterControls.GetGridCell(1,2,5).GetCentredInside(size), kParamVCFResonanse, "Res",
+                                               DEFAULT_STYLE.WithShowValue(false)));
+    pGraphics->AttachControl(new IVKnobControl(filterControls.GetGridCell(5,2,5).GetCentredInside(size), kParamVCFEnv, "Env",
+                                               DEFAULT_STYLE.WithShowValue(false)));
+    pGraphics->AttachControl(new IVKnobControl(filterControls.GetGridCell(6,2,5).GetCentredInside(size), kParamVCFMod, "Mod",
+                                               DEFAULT_STYLE.WithShowValue(false)));
+    pGraphics->AttachControl(new IVKnobControl(filterControls.GetGridCell(7,2,5).GetCentredInside(size), kParamVCFKeyboard, "Kbd",
+                                               DEFAULT_STYLE.WithShowValue(false)));
+    pGraphics->AttachControl(new IVKnobControl(filterControls.GetGridCell(8,2,5).GetCentredInside(size), kParamVCFBend, "Bend",
+                                               DEFAULT_STYLE.WithShowValue(false)));
     // pGraphics->AttachControl(new IVKnobControl(b.GetCentredInside(70).GetVShifted(-75), kParamGain, "Gain",  DEFAULT_STYLE.WithShowValue(false)));
-    pGraphics->AttachControl(new IVKnobControl(b.GetCentredInside(70).GetVShifted(-70).GetHShifted(-300), kParamTune, "Tune",
-                                               DEFAULT_STYLE.WithShowValue(false)));
-    pGraphics->AttachControl(new IVKnobControl(b.GetCentredInside(70).GetVShifted(0).GetHShifted(-300), kParamVolume, "Volume",
-                                               DEFAULT_STYLE.WithShowValue(false)));
     
-    pGraphics->AttachControl(new IVRadioButtonControl(controls.GetGridCell(0, 2, 2, 3).GetCentredInside(60), kParamPortamentoType, {}, "", DEFAULT_STYLE.WithShowLabel(true)));
     
-    pGraphics->AttachControl(new IVRadioButtonControl(controls.GetGridCell(0, 2, 4, 3).GetCentredInside(60).GetVShifted(100), kParamLFOWaveform, {}, "", DEFAULT_STYLE.WithShowLabel(false)));
+    // outputControls
+    pGraphics->AttachControl(new IVKnobControl(outputControls.GetGridCell(0,2,5).GetCentredInside(size), kParamTune, "Tune",
+                                               DEFAULT_STYLE.WithShowValue(false)));
+    pGraphics->AttachControl(new IVRadioButtonControl(outputControls.GetGridCell(1,2,5).GetCentredInside(size), kParamVCAType, {}, "", DEFAULT_STYLE.WithShowLabel(true)));
 
-    pGraphics->AttachControl(new IVKnobControl(controls.GetGridCell(0, 2, 2, 3).GetCentredInside(60).GetVShifted(170), kParamVCORange, "Range"), kNoTag, "Range")->DisablePrompt(false);
-    
-    pGraphics->AttachControl(new IVRadioButtonControl(controls.GetGridCell(0, 2, 2, 3).GetCentredInside(60).GetVShifted(240), kParamPulseSource, {}, "", DEFAULT_STYLE.WithShowLabel(true)));
-    
-    pGraphics->AttachControl(new IVRadioButtonControl(controls.GetGridCell(0, 2, 2, 3).GetCentredInside(60).GetVShifted(310), kParamSubType, {}, "", DEFAULT_STYLE.WithShowLabel(true)));
-    
-    pGraphics->AttachControl(new IVRadioButtonControl(controls.GetGridCell(0, 2, 2, 3).GetCentredInside(60).GetVShifted(380), kParamVCAType, {}, "", DEFAULT_STYLE.WithShowLabel(true)));
-    
-    
-    
-//    kParamPortamento,
-    pGraphics->AttachControl(new IVKnobControl(b.GetCentredInside(70).GetHShifted(-230).GetVShifted(-210), kParamPortamento, "Glide",
+    pGraphics->AttachControl(new IVKnobControl(outputControls.GetGridCell(2,2,5).GetCentredInside(size), kParamVolume, "Volume",
                                                DEFAULT_STYLE.WithShowValue(false)));
-    
-//    kParamLFORate,
-    pGraphics->AttachControl(new IVKnobControl(b.GetCentredInside(70).GetHShifted(-230).GetVShifted(-140), kParamLFORate, "LFO",
-                                               DEFAULT_STYLE.WithShowValue(false)));
+   
 
-//    kParamLFOBend, // what is this?
-    pGraphics->AttachControl(new IVKnobControl(b.GetCentredInside(70).GetHShifted(-230).GetVShifted(-70), kParamLFOBend, "LFOBend",
-                                               DEFAULT_STYLE.WithShowValue(false)));
-//    kParamVCOMod,
-    pGraphics->AttachControl(new IVKnobControl(b.GetCentredInside(70).GetHShifted(-230).GetVShifted(0), kParamVCOMod, "PMod",
-                                               DEFAULT_STYLE.WithShowValue(false)));
-//    kParamVCOBend,
-    pGraphics->AttachControl(new IVKnobControl(b.GetCentredInside(70).GetHShifted(-230).GetVShifted(70), kParamVCOBend, "PMod",
-                                               DEFAULT_STYLE.WithShowValue(false)));
-//    kParamPulseWidth,
-    pGraphics->AttachControl(new IVKnobControl(b.GetCentredInside(70).GetHShifted(-230).GetVShifted(140), kParamPulseWidth, "Width",
-                                               DEFAULT_STYLE.WithShowValue(false)));
-//    kParamMixerPulse,
-    pGraphics->AttachControl(new IVKnobControl(b.GetCentredInside(70).GetHShifted(-160).GetVShifted(-210), kParamMixerPulse, "vPulse",
-                                               DEFAULT_STYLE.WithShowValue(false)));
-    
-//    kParamMixerSaw,
-    pGraphics->AttachControl(new IVKnobControl(b.GetCentredInside(70).GetHShifted(-160).GetVShifted(-140), kParamMixerSaw, "Saw",
-                                               DEFAULT_STYLE.WithShowValue(false)));
-//    kParamMixerSub,
-    pGraphics->AttachControl(new IVKnobControl(b.GetCentredInside(70).GetHShifted(-160).GetVShifted(-70), kParamMixerSub, "Sub",
-                                               DEFAULT_STYLE.WithShowValue(false)));
-//    kParamMixerNoise,
-    pGraphics->AttachControl(new IVKnobControl(b.GetCentredInside(70).GetHShifted(-160).GetVShifted(0), kParamMixerNoise, "Noise",
-                                               DEFAULT_STYLE.WithShowValue(false)));
-//    kParamVCFFreq,
-    pGraphics->AttachControl(new IVKnobControl(b.GetCentredInside(70).GetHShifted(-90).GetVShifted(-210), kParamVCFFreq, "Freq",
-                                               DEFAULT_STYLE.WithShowValue(false)));
-//    kParamVCFResonanse,
-    pGraphics->AttachControl(new IVKnobControl(b.GetCentredInside(70).GetHShifted(-90).GetVShifted(-140), kParamVCFResonanse, "Res",
-                                               DEFAULT_STYLE.WithShowValue(false)));
-//    kParamVCFEnv,
-    pGraphics->AttachControl(new IVKnobControl(b.GetCentredInside(70).GetHShifted(-90).GetVShifted(-70), kParamVCFEnv, "Env",
-                                               DEFAULT_STYLE.WithShowValue(false)));
-//    kParamVCFMod,
-    pGraphics->AttachControl(new IVKnobControl(b.GetCentredInside(70).GetHShifted(-90).GetVShifted(0), kParamVCFMod, "Mod",
-                                               DEFAULT_STYLE.WithShowValue(false)));
-//    kParamVCFKeyboard,
-    pGraphics->AttachControl(new IVKnobControl(b.GetCentredInside(70).GetHShifted(-90).GetVShifted(70), kParamVCFKeyboard, "Kbd",
-                                               DEFAULT_STYLE.WithShowValue(false)));
-//    kParamVCFBend,
-    pGraphics->AttachControl(new IVKnobControl(b.GetCentredInside(70).GetHShifted(-90).GetVShifted(140), kParamVCFBend, "Bend",
-                                               DEFAULT_STYLE.WithShowValue(false)));
-    
-    // make a rect thats in the 2nd cell of a grid of the display that's 2x2
-    // then add 4 countrol each in the centre of a 4x1 grid within that rect
-    const IRECT adsrControls = b.GetGridCell(1, 2, 2);
-//    kParamEnvAttack,
-    pGraphics->AttachControl(new IVKnobControl(adsrControls.GetGridCell(0, 1, 4).GetCentredInside(70), kParamEnvAttack, "Attack",
-                                               DEFAULT_STYLE.WithShowValue(false)));
-//    kParamEnvDecay,
-    pGraphics->AttachControl(new IVKnobControl(adsrControls.GetGridCell(1, 1, 4).GetCentredInside(70), kParamEnvDecay, "Decay",
-                                               DEFAULT_STYLE.WithShowValue(false)));
-//    kParamEnvSustain,
-    pGraphics->AttachControl(new IVKnobControl(adsrControls.GetGridCell(2, 1, 4).GetCentredInside(70), kParamEnvSustain, "Sustain",
-                                               DEFAULT_STYLE.WithShowValue(false)));
-//    kParamEnvRelease,
-    pGraphics->AttachControl(new IVKnobControl(adsrControls.GetGridCell(3, 1, 4).GetCentredInside(70), kParamEnvRelease, "Release",
-                                               DEFAULT_STYLE.WithShowValue(false)));
-    
-    // pGraphics->AttachControl(new IVKnobControl(controls.GetGridCell(0, 2, 2, 3).GetCentredInside(60), kParamPortamentoType, "Mode"), kNoTag, "Portamento")->DisablePrompt(false);
-    
-  
-    //pGraphics->AttachControl(new IVKnobControl(controls.GetGridCell(0, 2, 6).GetCentredInside(90), kParamGain, "Gain"));
-//#ifdef OS_IOS
-//    if(!IsOOPAuv3AppExtension())
-//    {
-//      pGraphics->AttachControl(new IVButtonControl(b.GetFromTRHC(100, 100), [pGraphics](IControl* pCaller) {
-//                               dynamic_cast<IGraphicsIOS*>(pGraphics)->LaunchBluetoothMidiDialog(pCaller->GetRECT().L, pCaller->GetRECT().MH());
-//                               SplashClickActionFunc(pCaller);
-//                             }, "BTMIDI"));
-//    }
-//#endif
     
     pGraphics->SetQwertyMidiKeyHandlerFunc([pGraphics](const IMidiMsg& msg) {
                                               pGraphics->GetControlWithTag(kCtrlTagKeyboard)->As<IVKeyboardControl>()->SetNoteFromMidi(msg.NoteNumber(), msg.StatusMsg() == IMidiMsg::kNoteOn);

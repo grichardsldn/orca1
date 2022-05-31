@@ -18,6 +18,7 @@ enum EParams
   kParamVCOMod,
   kParamVCORange, // 16,8,4,2
   kParamVCOBend,
+  kParamVCOMode, // mono/poly
   kParamPulseWidth,
   kParamPulseSource, // lfo, manual, env
   kParamMixerPulse,
