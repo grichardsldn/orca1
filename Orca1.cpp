@@ -1,4 +1,5 @@
 #include "Orca1.h"
+
 #include "IPlug_include_in_plug_src.h"
 
 Orca1::Orca1(const InstanceInfo& info)
@@ -187,6 +188,10 @@ Orca1::Orca1(const InstanceInfo& info)
                                               pGraphics->GetControlWithTag(kCtrlTagKeyboard)->As<IVKeyboardControl>()->SetNoteFromMidi(msg.NoteNumber(), msg.StatusMsg() == IMidiMsg::kNoteOn);
                                            });
   };
+#endif
+  
+#if IPLUG_DSP
+  dsp = new OrcaDSP();
 #endif
 }
 
