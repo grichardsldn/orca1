@@ -199,6 +199,8 @@ Orca1::Orca1(const InstanceInfo& info)
 void Orca1::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
 {
   //const double gain = GetParam(kGain)->Value() / 100.;
+  dsp->config.pulse_width_manual = GetParam(kParamPulseWidth)->Value() / 100.0;
+
   const int nChans = NOutChansConnected();
   dsp->config.samplerate = GetSampleRate();
   

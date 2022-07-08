@@ -10,6 +10,7 @@ class OrcaTonegen {
     const double* saw_mix;
     const double* pulse_mix;
     const double* noise_mix;
+    const double* pulse_width_manual;
     const double* sub_mix;
     const int* sub_type;
 
@@ -18,9 +19,11 @@ class OrcaTonegen {
     double hz;
 
     public:
-    OrcaTonegen(const int *note, const int*samplerate, const double* modify_amount ) {
-        this->note = note;
-        this->samplerate = samplerate;
+    OrcaTonegen(const int *note, const int*samplerate, const double* modify_amount,
+      const double* pulse_width_manual ) {
+      this->note = note;
+      this->samplerate = samplerate;
+      this->pulse_width_manual = pulse_width_manual;
       through = 0.0;
       hz = 440.0; // default
     };
@@ -39,7 +42,7 @@ class OrcaTonegen {
       if (through > 1.0) {
         through -= 1.0;
       }
-      if( through > 0.5) {
+      if( through > (0.5 + (*pulse_width_manual/1.8)) ){
         return 1.0;
       } else {
         return -1.0;
