@@ -5,7 +5,7 @@
 
 class OrcaDSP {
     public:
-    OrcaConfig config;
+    const OrcaConfig* config;
 
     private:
     //components
@@ -17,10 +17,10 @@ class OrcaDSP {
 
     public:
     // methods
-    OrcaDSP() {
-        config.samplerate = 0;
-        lfo = new LFO(&config.lfo_rate, &config.lfo_waveform);
-        channel = new OrcaChannel(&config, &lfo_value);
+    OrcaDSP(const OrcaConfig* config) {
+        this->config = config;
+        lfo = new LFO(&config->lfoRate, &config->lfoWaveform);
+        channel = new OrcaChannel(config, &lfo_value);
     }
 
     void NoteOn(int note, int velocity) {
