@@ -28,7 +28,7 @@ class OrcaChannel {
         this->config = config;
         this->lfo = lfo;
 
-        tonegen = new OrcaTonegen(&note, &config->samplerate, &modify_amount); 
+        tonegen = new OrcaTonegen(&note, &config->samplerate, &modify_amount, &config->pulse_width_manual); 
         filter = new Filter( &config->samplerate);
         adsr = new ADSR(&config->samplerate);
     };
