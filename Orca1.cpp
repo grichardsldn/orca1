@@ -191,7 +191,7 @@ Orca1::Orca1(const InstanceInfo& info)
 #endif
   
 #if IPLUG_DSP
-  dsp = new OrcaDSP();
+  dsp = new OrcaDSP(&config);
 #endif
 }
 
@@ -199,10 +199,10 @@ Orca1::Orca1(const InstanceInfo& info)
 void Orca1::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
 {
   //const double gain = GetParam(kGain)->Value() / 100.;
-  dsp->config.pulseWidthManual = GetParam(kParamPulseWidthManual)->Value() / 100.0;
+  config.pulseWidthManual = GetParam(kParamPulseWidthManual)->Value() / 100.0;
 
   const int nChans = NOutChansConnected();
-  dsp->config.samplerate = GetSampleRate();
+  config.samplerate = GetSampleRate();
   
   for (int s = 0; s < nFrames; s++) {
     const iplug::sample output = dsp->Tick();

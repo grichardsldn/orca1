@@ -78,5 +78,6 @@ public:
 
 private:
   OrcaDSP* dsp;
+  OrcaConfig config;
 #endif
 };
