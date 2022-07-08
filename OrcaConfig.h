@@ -2,8 +2,8 @@
 
 struct OrcaConfig {
     // LFO
-    double lfo_rate;
-    int lfo_waveform;
+    double lfoRate;
+    int lfoWaveform;
   
     // global
     double volume;
@@ -12,11 +12,11 @@ struct OrcaConfig {
     int samplerate;
   
     // mixer
-    double pulse_mix;
-    double noise_mix;
-    double sub_mix;
-    int sub_type;
+    double pulseMix;
+    double noiseMix;
+    double subMix;
+    int subType;
   
     // tone generator
-    double pulse_width_manual;
+    double pulseWidthManual;
 };

@@ -19,7 +19,7 @@ class OrcaDSP {
     // methods
     OrcaDSP() {
         config.samplerate = 0;
-        lfo = new LFO(&config.lfo_rate, &config.lfo_waveform);
+        lfo = new LFO(&config.lfoRate, &config.lfoWaveform);
         channel = new OrcaChannel(&config, &lfo_value);
     }
 

@@ -7,7 +7,7 @@ Orca1::Orca1(const InstanceInfo& info)
 {
   GetParam(kParamGain)->InitDouble("Volume", 80, 0., 100.0, 0.01, "");
   GetParam(kParamPortamentoType)->InitEnum("P-Mode", 0, {"Auto", "Off", "On"} );
-  GetParam(kParamLFOWaveform)->InitEnum("LFOWaveform", 0, {"Triangle", "Square", "Random", "Noise"} );
+  GetParam(kParamLfoWaveform)->InitEnum("LFOWaveform", 0, {"Triangle", "Square", "Random", "Noise"} );
   GetParam(kParamVCORange)->InitEnum("Range", 0, {"16", "8", "4", "2"} );
   GetParam(kParamPulseSource)->InitEnum("Source", 0, {"LFO", "Manual", "Env"} );
   GetParam(kParamSubType)->InitEnum("Sub", 0, {"1 Oct sq", "2 Oct sq", "2 oct pulse"} );
@@ -17,10 +17,10 @@ Orca1::Orca1(const InstanceInfo& info)
   GetParam(kParamPortamento)->InitDouble("Glide", 0., 0., 100.0, 0.01, "");
   
 //  kParamLFORate,
-  GetParam(kParamLFORate)->InitDouble("LFO", 100., 0., 100.0, 0.01, "");
+  GetParam(kParamLfoRate)->InitDouble("LFO", 100., 0., 100.0, 0.01, "");
   
 //  kParamLFOBend, // what is this?
-  GetParam(kParamLFOBend)->InitDouble("LFOBend", 100., 0., 100.0, 0.01, "");
+  GetParam(kParamLfoBend)->InitDouble("LFOBend", 100., 0., 100.0, 0.01, "");
   
 //  kParamVCOMod,
   GetParam(kParamVCOMod)->InitDouble("Osc mod", 100., 0., 100.0, 0.01, "");
@@ -29,19 +29,19 @@ Orca1::Orca1(const InstanceInfo& info)
   GetParam(kParamVCOBend)->InitDouble("Osc bend", 0., 0., 100.0, 0.01, "");
   
 //  kParamPulseWidth,
-  GetParam(kParamPulseWidth)->InitDouble("Width", 100., 0., 100.0, 0.01, "%");
+  GetParam(kParamPulseWidthManual)->InitDouble("Width", 100., 0., 100.0, 0.01, "%");
   
 //  kParamMixerPulse,
-  GetParam(kParamMixerPulse)->InitDouble("Pulse lvl", 100., 0., 100.0, 0.01, "");
+  GetParam(kParamPulseMix)->InitDouble("Pulse lvl", 100., 0., 100.0, 0.01, "");
   
 //  kParamMixerSaw,
-  GetParam(kParamMixerSaw)->InitDouble("Saw lvl", 100., 0., 100.0, 0.01, "");
+  GetParam(kParamSawMix)->InitDouble("Saw lvl", 100., 0., 100.0, 0.01, "");
   
 //  kParamMixerSub,
-  GetParam(kParamMixerSub)->InitDouble("Sub lvl", 100., 0., 100.0, 0.01, "");
+  GetParam(kParamSubMix)->InitDouble("Sub lvl", 100., 0., 100.0, 0.01, "");
   
 //  kParamMixerNoise,
-  GetParam(kParamMixerNoise)->InitDouble("Noise", 100., 0., 100.0, 0.01, "");
+  GetParam(kParamNoiseMix)->InitDouble("Noise", 100., 0., 100.0, 0.01, "");
   
 //  kParamVCFFreq,
   GetParam(kParamVCFFreq)->InitDouble("Freq", 100., 0., 100.0, 0.01, "");
@@ -114,7 +114,7 @@ Orca1::Orca1(const InstanceInfo& info)
     pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(0,2,5).GetCentredInside(size), kParamVCORange, "Range"), kNoTag, "Range")->DisablePrompt(false);
     pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(1,2,5).GetCentredInside(size), kParamPortamento, "Glide",
                                                DEFAULT_STYLE.WithShowValue(false)));
-    pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(2,2,5).GetCentredInside(size), kParamPulseWidth, "Width",
+    pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(2,2,5).GetCentredInside(size), kParamPulseWidthManual, "Width",
                                                DEFAULT_STYLE.WithShowValue(false)));
     pGraphics->AttachControl(new IVRadioButtonControl(oscControls.GetGridCell(3,2,5).GetCentredInside(size), kParamPulseSource, {}, "", DEFAULT_STYLE.WithShowLabel(true)));
     pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(5,2,5).GetCentredInside(size), kParamVCOBend, "Bend",
@@ -128,22 +128,22 @@ Orca1::Orca1(const InstanceInfo& info)
     
         
     // modControls
-    pGraphics->AttachControl(new IVKnobControl(modControls.GetGridCell(0,2,5).GetCentredInside(size), kParamLFORate, "Rate",
+    pGraphics->AttachControl(new IVKnobControl(modControls.GetGridCell(0,2,5).GetCentredInside(size), kParamLfoRate, "Rate",
                                                DEFAULT_STYLE.WithShowValue(false)));
     
-    pGraphics->AttachControl(new IVRadioButtonControl(modControls.GetGridCell(1,2,5).GetCentredInside(size), kParamLFOWaveform, {}, "", DEFAULT_STYLE.WithShowLabel(false)));
+    pGraphics->AttachControl(new IVRadioButtonControl(modControls.GetGridCell(1,2,5).GetCentredInside(size), kParamLfoWaveform, {}, "", DEFAULT_STYLE.WithShowLabel(false)));
     
-    pGraphics->AttachControl(new IVKnobControl(modControls.GetGridCell(5,2,5).GetCentredInside(size), kParamLFOBend, "Bend",
+    pGraphics->AttachControl(new IVKnobControl(modControls.GetGridCell(5,2,5).GetCentredInside(size), kParamLfoBend, "Bend",
                                                DEFAULT_STYLE.WithShowValue(false)));
 
     // mixControls
-    pGraphics->AttachControl(new IVKnobControl(mixControls.GetGridCell(0,1,5).GetCentredInside(size), kParamMixerPulse, "Pulse",
+    pGraphics->AttachControl(new IVKnobControl(mixControls.GetGridCell(0,1,5).GetCentredInside(size), kParamPulseMix, "Pulse",
                                                DEFAULT_STYLE.WithShowValue(false)));
-    pGraphics->AttachControl(new IVKnobControl(mixControls.GetGridCell(1,1,5).GetCentredInside(size), kParamMixerSaw, "Saw",
+    pGraphics->AttachControl(new IVKnobControl(mixControls.GetGridCell(1,1,5).GetCentredInside(size), kParamSawMix, "Saw",
                                                DEFAULT_STYLE.WithShowValue(false)));
-    pGraphics->AttachControl(new IVKnobControl(mixControls.GetGridCell(2,1,5).GetCentredInside(size), kParamMixerSub, "Sub",
+    pGraphics->AttachControl(new IVKnobControl(mixControls.GetGridCell(2,1,5).GetCentredInside(size), kParamSubMix, "Sub",
                                                DEFAULT_STYLE.WithShowValue(false)));
-    pGraphics->AttachControl(new IVKnobControl(mixControls.GetGridCell(3,1,5).GetCentredInside(size), kParamMixerNoise, "Noise",
+    pGraphics->AttachControl(new IVKnobControl(mixControls.GetGridCell(3,1,5).GetCentredInside(size), kParamNoiseMix, "Noise",
                                                 DEFAULT_STYLE.WithShowValue(false)));
     
     pGraphics->AttachControl(new IVRadioButtonControl(mixControls.GetGridCell(4,1,5).GetCentredInside(size), kParamSubType, {}, "", DEFAULT_STYLE.WithShowLabel(true)));
@@ -199,7 +199,7 @@ Orca1::Orca1(const InstanceInfo& info)
 void Orca1::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
 {
   //const double gain = GetParam(kGain)->Value() / 100.;
-  dsp->config.pulse_width_manual = GetParam(kParamPulseWidth)->Value() / 100.0;
+  dsp->config.pulseWidthManual = GetParam(kParamPulseWidthManual)->Value() / 100.0;
 
   const int nChans = NOutChansConnected();
   dsp->config.samplerate = GetSampleRate();
