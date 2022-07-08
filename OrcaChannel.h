@@ -36,6 +36,7 @@ class OrcaChannel {
     void Trigger( int note, double velocity ) {
         this->note = note;
         this->velocity = velocity;
+        this->tonegen->Restart();
         this->adsr->Trigger();
     };
     void Release() {

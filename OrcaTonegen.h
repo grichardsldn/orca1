@@ -1,4 +1,5 @@
 #pragma once
+#include <math.h>
 
 class OrcaTonegen {
     private:
@@ -13,28 +14,39 @@ class OrcaTonegen {
     const int* sub_type;
 
     // state
-    int left;
-  int length;
+    double through;  // 0 > 1
+    double hz;
+
     public:
     OrcaTonegen(const int *note, const int*samplerate, const double* modify_amount ) {
         this->note = note;
         this->samplerate = samplerate;
-      left = 0;
-      length = 100;
+      through = 0.0;
+      hz = 440.0; // default
     };
-    double Tick() {
-      length = 1000 / (*note + 1);
-      if (left > 0) {
-        left--;
-        if (left > length / 2) {
-          return -1.0;
-        } else {
-          return 1.0;
-        }
-      } else {
-        left = length;
-        return 0.0;
-      }
 
+    double Tick() {
+      double a = 440; //frequency of A (coomon value is 440Hz)
+      hz = (a / 32) * pow(2, ((*note - 9) / 12.0));
+      const double samplerate = (double)(*this->samplerate);
+      // const double samplerate = 44000.0;
+      const double periodSamples = samplerate / hz;
+      const double delta = 1.0/periodSamples;
+      through += delta;
+      if (delta > 1.0) {
+        return -1;
+      }
+      if (through > 1.0) {
+        through -= 1.0;
+      }
+      if( through > 0.5) {
+        return 1.0;
+      } else {
+        return -1.0;
+      }
     };
+
+    void Restart() {
+      through = 0.0;
+    }
 };

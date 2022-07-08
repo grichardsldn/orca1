@@ -200,6 +200,7 @@ void Orca1::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
 {
   //const double gain = GetParam(kGain)->Value() / 100.;
   const int nChans = NOutChansConnected();
+  dsp->config.samplerate = GetSampleRate();
   
   for (int s = 0; s < nFrames; s++) {
     const iplug::sample output = dsp->Tick();
