@@ -9,8 +9,7 @@ const int kNumPresets = 1;
 
 enum EParams
 {
-  kParamGain = 0,
-  kParamTune,
+  kParamTune = 0,
   kParamVolume,
   kParamPortamento,
   kParamPortamentoType, // auto, off, on

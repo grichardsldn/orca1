@@ -5,7 +5,6 @@
 Orca1::Orca1(const InstanceInfo& info)
 : Plugin(info, MakeConfig(kNumParams, kNumPresets))
 {
-  GetParam(kParamGain)->InitDouble("Volume", 80, 0., 100.0, 0.01, "");
   GetParam(kParamPortamentoType)->InitEnum("P-Mode", 0, {"Auto", "Off", "On"} );
   GetParam(kParamLfoWaveform)->InitEnum("LFOWaveform", 0, {"Triangle", "Square", "Random", "Noise"} );
   GetParam(kParamVCORange)->InitEnum("Range", 0, {"16", "8", "4", "2"} );
