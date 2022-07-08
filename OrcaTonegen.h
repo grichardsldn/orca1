@@ -37,4 +37,7 @@ class OrcaTonegen {
       }
 
     };
+    void Restart() {
+      left = 0;
+    }
 };
