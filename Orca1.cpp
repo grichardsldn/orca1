@@ -29,7 +29,7 @@ Orca1::Orca1(const InstanceInfo& info)
   GetParam(kParamVCOBend)->InitDouble("Osc bend", 0., 0., 100.0, 0.01, "");
   
 //  kParamPulseWidth,
-  GetParam(kParamPulseWidthManual)->InitDouble("Width", 100., 0., 100.0, 0.01, "%");
+  GetParam(kParamPulseWidthManual)->InitDouble("PulseWidthManual", 100., 0., 100.0, 0.01, "%");
   
 //  kParamMixerPulse,
   GetParam(kParamPulseMix)->InitDouble("Pulse lvl", 100., 0., 100.0, 0.01, "");
