@@ -28,7 +28,7 @@ class OrcaChannel {
         this->config = config;
         this->lfo = lfo;
 
-        tonegen = new OrcaTonegen(&note, &config->samplerate, &modify_amount, &config->pulse_width_manual); 
+        tonegen = new OrcaTonegen(&note, &config->samplerate, &modify_amount, &config->pulseWidthManual);
         filter = new Filter( &config->samplerate);
         adsr = new ADSR(&config->samplerate);
     };
@@ -45,7 +45,7 @@ class OrcaChannel {
 
     double Tick() {
         // set the modify amount
-        modify_amount = config->pulse_width_manual; // for now stick to 'manual'   
+        modify_amount = config->pulseWidthManual; // for now stick to 'manual'   
 
         const double raw_tone = tonegen->Tick();
         const double filtered = filter->Tick(raw_tone);

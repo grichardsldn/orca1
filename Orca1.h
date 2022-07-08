@@ -9,25 +9,24 @@ const int kNumPresets = 1;
 
 enum EParams
 {
-  kParamGain = 0,
-  kParamTune,
+  kParamTune = 0,
   kParamVolume,
   kParamPortamento,
   kParamPortamentoType, // auto, off, on
-  kParamLFORate,
-  kParamLFOWaveform, // tri, square, random, noise
-  kParamLFOBend, // what is this?
+  kParamLfoRate,
+  kParamLfoWaveform, // tri, square, random, noise
+  kParamLfoBend, // what is this?
   kParamVCOMod,
   kParamVCORange, // 16,8,4,2
   kParamVCOBend,
   kParamVCOMode, // mono/poly
-  kParamPulseWidth,
+  kParamPulseWidthManual,
   kParamPulseSource, // lfo, manual, env
-  kParamMixerPulse,
-  kParamMixerSaw,
-  kParamMixerSub,
+  kParamPulseMix,
+  kParamSawMix,
+  kParamSubMix,
   kParamSubType, // 1 oct down square, 2 oct down square, 2 oct down pulse
-  kParamMixerNoise,
+  kParamNoiseMix,
   kParamVCFFreq,
   kParamVCFResonanse,
   kParamVCFEnv,
@@ -78,5 +77,6 @@ public:
 
 private:
   OrcaDSP* dsp;
+  OrcaConfig config;
 #endif
 };
