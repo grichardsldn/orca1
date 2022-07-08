@@ -31,16 +31,16 @@ Orca1::Orca1(const InstanceInfo& info)
   GetParam(kParamPulseWidthManual)->InitDouble("PulseWidthManual", 100., 0., 100.0, 0.01, "%");
   
 //  kParamMixerPulse,
-  GetParam(kParamPulseMix)->InitDouble("Pulse lvl", 100., 0., 100.0, 0.01, "");
+  GetParam(kParamPulseMix)->InitDouble("PulseMix", 100., 0., 100.0, 0.01, "");
   
 //  kParamMixerSaw,
-  GetParam(kParamSawMix)->InitDouble("Saw lvl", 100., 0., 100.0, 0.01, "");
+  GetParam(kParamSawMix)->InitDouble("SawMix", 100., 0., 100.0, 0.01, "");
   
 //  kParamMixerSub,
-  GetParam(kParamSubMix)->InitDouble("Sub lvl", 100., 0., 100.0, 0.01, "");
+  GetParam(kParamSubMix)->InitDouble("SubMix", 100., 0., 100.0, 0.01, "");
   
 //  kParamMixerNoise,
-  GetParam(kParamNoiseMix)->InitDouble("Noise", 100., 0., 100.0, 0.01, "");
+  GetParam(kParamNoiseMix)->InitDouble("NoiseMix", 100., 0., 100.0, 0.01, "");
   
 //  kParamVCFFreq,
   GetParam(kParamVCFFreq)->InitDouble("Freq", 100., 0., 100.0, 0.01, "");
