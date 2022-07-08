@@ -48,7 +48,8 @@ class OrcaChannel {
 
         const double raw_tone = tonegen->Tick();
         const double filtered = filter->Tick(raw_tone);
-        const double enveloped = adsr->Tick(filtered);
+      const double envelope = adsr->Tick(filtered);
+        const double enveloped = filtered * envelope;
         return enveloped;
     }
 };
