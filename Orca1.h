@@ -1,7 +1,9 @@
 #pragma once
 
+#include "config.h"
 #include "IPlug_include_in_plug_hdr.h"
 #include "IControls.h"
+#include "OrcaDSP.h"
 
 const int kNumPresets = 1;
 
@@ -75,6 +77,6 @@ public:
   bool OnMessage(int msgTag, int ctrlTag, int dataSize, const void* pData) override;
 
 private:
-
+  OrcaDSP* dsp;
 #endif
 };

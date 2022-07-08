@@ -1,4 +1,5 @@
 #include "Orca1.h"
+
 #include "IPlug_include_in_plug_src.h"
 
 Orca1::Orca1(const InstanceInfo& info)
@@ -183,16 +184,29 @@ Orca1::Orca1(const InstanceInfo& info)
    
 
     
-    pGraphics->SetQwertyMidiKeyHandlerFunc([pGraphics](const IMidiMsg& msg) {
-                                              pGraphics->GetControlWithTag(kCtrlTagKeyboard)->As<IVKeyboardControl>()->SetNoteFromMidi(msg.NoteNumber(), msg.StatusMsg() == IMidiMsg::kNoteOn);
-                                           });
+    // pGraphics->SetQwertyMidiKeyHandlerFunc([pGraphics](const IMidiMsg& msg) {
+                           //                   //pGraphics->GetControlWithTag(kCtrlTagKeyboard)->As<IVKeyboardControl>()->SetNoteFromMidi(msg// // .NoteNumber(), msg.StatusMsg() == IMidiMsg::kNoteOn);
+                             //              });
   };
+#endif
+  
+#if IPLUG_DSP
+  dsp = new OrcaDSP();
 #endif
 }
 
 #if IPLUG_DSP
 void Orca1::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
 {
+  //const double gain = GetParam(kGain)->Value() / 100.;
+  const int nChans = NOutChansConnected();
+  
+  for (int s = 0; s < nFrames; s++) {
+    const iplug::sample output = dsp->Tick();
+    for (int c = 0; c < nChans; c++) {
+      outputs[c][s] = output;
+    }
+  }
 }
 
 void Orca1::OnIdle()
@@ -226,6 +240,12 @@ void Orca1::ProcessMidiMsg(const IMidiMsg& msg)
   }
   
 handle:
+  if(status == IMidiMsg::kNoteOn) {
+    dsp->NoteOn(msg.NoteNumber(), msg.Velocity());
+  }
+  if (status == IMidiMsg::kNoteOff) {
+    dsp->NoteOff(msg.NoteNumber());
+  }
   // mDSP.ProcessMidiMsg(msg);
   SendMidiMsg(msg);
 }

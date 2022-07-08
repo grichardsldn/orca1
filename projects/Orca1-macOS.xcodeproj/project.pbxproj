@@ -21,6 +21,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		25445F04286F86220014133C /* projects in Resources */ = {isa = PBXBuildFile; fileRef = 25445F03286F86220014133C /* projects */; };
+		25445F06286F890C0014133C /* projects in Resources */ = {isa = PBXBuildFile; fileRef = 25445F05286F890C0014133C /* projects */; };
 		4F03A58C20A4621100EBDFFB /* IGraphicsNanoVG.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F03A55020A4621000EBDFFB /* IGraphicsNanoVG.h */; };
 		4F03A5AA20A4621100EBDFFB /* IGraphicsLiveEdit.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F03A55620A4621000EBDFFB /* IGraphicsLiveEdit.h */; };
 		4F03A5AB20A4621100EBDFFB /* IGraphics_include_in_plug_hdr.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F03A55720A4621000EBDFFB /* IGraphics_include_in_plug_hdr.h */; };
@@ -221,6 +223,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		25445F03286F86220014133C /* projects */ = {isa = PBXFileReference; lastKnownFileType = folder; name = projects; sourceTree = "<group>"; };
+		25445F05286F890C0014133C /* projects */ = {isa = PBXFileReference; lastKnownFileType = folder; name = projects; sourceTree = "<group>"; };
 		4F03A55020A4621000EBDFFB /* IGraphicsNanoVG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGraphicsNanoVG.h; sourceTree = "<group>"; };
 		4F03A55420A4621000EBDFFB /* IGraphicsNanoVG.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IGraphicsNanoVG.cpp; sourceTree = "<group>"; };
 		4F03A55620A4621000EBDFFB /* IGraphicsLiveEdit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IGraphicsLiveEdit.h; path = ../../../IGraphics/IGraphicsLiveEdit.h; sourceTree = "<group>"; };
@@ -614,6 +618,8 @@
 				4F3862EE2014BBEC0009F402 /* Orca1.h */,
 				4F3862ED2014BBEC0009F402 /* Orca1.cpp */,
 				4F11D4072320145E003E1647 /* Orca1_DSP.h */,
+				25445F03286F86220014133C /* projects */,
+				25445F05286F890C0014133C /* projects */,
 				4F9313232315CA1100DB2383 /* README.md */,
 				089C167CFE841241C02AAC07 /* Resources */,
 				32C88E010371C26100C91783 /* Other Sources */,
@@ -1558,6 +1564,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				25445F06286F890C0014133C /* projects in Resources */,
+				25445F04286F86220014133C /* projects in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
