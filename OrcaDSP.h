@@ -33,8 +33,8 @@ class OrcaDSP {
     iplug::sample Tick() {
         lfoValue = lfo->Tick();
         const iplug::sample channel_output = channel->Tick();
-        return (iplug::sample)((channel_output) * lfoValue);
-        // return (iplug::sample)(channel_output);
+        // return (iplug::sample)((channel_output) * lfoValue);
+        return (iplug::sample)(channel_output);
         // return (iplug::sample)(channel_output * config.volume);
     };
 };
