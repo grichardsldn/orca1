@@ -13,14 +13,14 @@ class OrcaDSP {
     LFO* lfo;
 
     // state
-    double lfo_value;
+    double lfoValue;
 
     public:
     // methods
     OrcaDSP(const OrcaConfig* config) {
         this->config = config;
-        lfo = new LFO(&config->lfoRate, &config->lfoWaveform);
-        channel = new OrcaChannel(config, &lfo_value);
+        lfo = new LFO(&config->lfoRate, &config->samplerate, &config->lfoWaveform);
+        channel = new OrcaChannel(config, &lfoValue);
     }
 
     void NoteOn(int note, int velocity) {
@@ -31,9 +31,10 @@ class OrcaDSP {
     }
 
     iplug::sample Tick() {
-        lfo_value = lfo->Tick();
+        lfoValue = lfo->Tick();
         const iplug::sample channel_output = channel->Tick();
-      return (iplug::sample)(channel_output);
+        // return (iplug::sample)((channel_output) * lfoValue);
+        return (iplug::sample)(channel_output);
         // return (iplug::sample)(channel_output * config.volume);
     };
 };
