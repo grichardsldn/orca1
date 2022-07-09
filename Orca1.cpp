@@ -16,7 +16,7 @@ Orca1::Orca1(const InstanceInfo& info)
   GetParam(kParamPortamento)->InitDouble("Glide", 0., 0., 100.0, 0.01, "");
   
 //  kParamLFORate,
-  GetParam(kParamLfoRate)->InitDouble("LFO", 100., 0., 100.0, 0.01, "");
+  GetParam(kParamLfoRate)->InitDouble("LfoRate", 0.3, 0.05, 10.0, 0.01, "");
   
 //  kParamLFOBend, // what is this?
   GetParam(kParamLfoBend)->InitDouble("LFOBend", 100., 0., 100.0, 0.01, "");
@@ -199,6 +199,7 @@ void Orca1::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
 {
   //const double gain = GetParam(kGain)->Value() / 100.;
   config.pulseWidthManual = GetParam(kParamPulseWidthManual)->Value() / 100.0;
+  config.lfoRate = GetParam(kParamLfoRate)->Value();
 
   const int nChans = NOutChansConnected();
   config.samplerate = GetSampleRate();
