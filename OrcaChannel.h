@@ -30,7 +30,7 @@ class OrcaChannel {
 
         tonegen = new OrcaTonegen(&note, &config->samplerate, &modify_amount, &config->pulseWidthManual);
         filter = new Filter( &config->samplerate);
-        adsr = new ADSR(&config->samplerate);
+        adsr = new ADSR(&config->samplerate, &config->attack, &config->decay, &config->sustain, &config->release);
     };
 
     void Trigger( int note, double velocity ) {

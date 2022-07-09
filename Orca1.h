@@ -34,10 +34,10 @@ enum EParams
   kParamVCFKeyboard,
   kParamVCFBend,
   kParamVCAType, // env/gate
-  kParamEnvAttack,
-  kParamEnvDecay,
-  kParamEnvSustain,
-  kParamEnvRelease,
+  kParamAttack,
+  kParamDecay,
+  kParamSustain,
+  kParamRelease,
   
   kNumParams
 };

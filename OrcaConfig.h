@@ -19,4 +19,10 @@ struct OrcaConfig {
   
     // tone generator
     double pulseWidthManual;
+
+    // envelope generator
+    double attack; // ms to full rise
+    double decay; // ms to full fall
+    double sustain; // sustain level
+    double release; // ms to full fall
 };

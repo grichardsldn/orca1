@@ -60,15 +60,11 @@ Orca1::Orca1(const InstanceInfo& info)
 //  kParamVCFBend,
   GetParam(kParamVCFBend)->InitDouble("FBend", 100., 0., 100.0, 0.01, "");
   
-//  kParamEnvAttack,
-  GetParam(kParamEnvAttack)->InitDouble("Attack", 100., 0., 100.0, 0.01, "");
-//  kParamEnvDecay,
-  GetParam(kParamEnvDecay)->InitDouble("Decay", 100., 0., 100.0, 0.01, "");
-//  kParamEnvSustain,
-  GetParam(kParamEnvSustain)->InitDouble("Sustain", 100., 0., 100.0, 0.01, "");
-//  kParamEnvRelease,
-  GetParam(kParamEnvRelease)->InitDouble("Release", 100., 0., 100.0, 0.01, "");
-  
+  // env generator
+  GetParam(kParamAttack)->InitDouble("Attack", 100., 0., 10000.0, 0.01, "");
+  GetParam(kParamDecay)->InitDouble("Decay", 100., 0., 10000.0, 0.01, "");
+  GetParam(kParamSustain)->InitDouble("Sustain", 0.2, 0., 1.0, 0.01, "");
+  GetParam(kParamRelease)->InitDouble("Release", 300., 0., 10000.0, 0.01, "");
   
   GetParam(kParamTune)->InitDouble("Tune", 0., -100., 100.0, 0.05, "");
   
@@ -148,13 +144,13 @@ Orca1::Orca1(const InstanceInfo& info)
     pGraphics->AttachControl(new IVRadioButtonControl(mixControls.GetGridCell(4,1,5).GetCentredInside(size), kParamSubType, {}, "", DEFAULT_STYLE.WithShowLabel(true)));
                  
     // env controls
-    pGraphics->AttachControl(new IVKnobControl(envControls.GetGridCell(0,1,5).GetCentredInside(size), kParamEnvAttack, "Attack",
+    pGraphics->AttachControl(new IVKnobControl(envControls.GetGridCell(0,1,5).GetCentredInside(size), kParamAttack, "Attack",
                                                DEFAULT_STYLE.WithShowValue(false)));
-    pGraphics->AttachControl(new IVKnobControl(envControls.GetGridCell(1,1,5).GetCentredInside(size), kParamEnvDecay, "Decay",
+    pGraphics->AttachControl(new IVKnobControl(envControls.GetGridCell(1,1,5).GetCentredInside(size), kParamDecay, "Decay",
                                                DEFAULT_STYLE.WithShowValue(false)));
-    pGraphics->AttachControl(new IVKnobControl(envControls.GetGridCell(2,1,5).GetCentredInside(size), kParamEnvSustain, "Sustain",
+    pGraphics->AttachControl(new IVKnobControl(envControls.GetGridCell(2,1,5).GetCentredInside(size), kParamSustain, "Sustain",
                                                DEFAULT_STYLE.WithShowValue(false)));
-    pGraphics->AttachControl(new IVKnobControl(envControls.GetGridCell(3,1,5).GetCentredInside(size), kParamEnvRelease, "Release",
+    pGraphics->AttachControl(new IVKnobControl(envControls.GetGridCell(3,1,5).GetCentredInside(size), kParamRelease, "Release",
                                                DEFAULT_STYLE.WithShowValue(false)));
     
     // filterControls
@@ -200,6 +196,11 @@ void Orca1::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
   //const double gain = GetParam(kGain)->Value() / 100.;
   config.pulseWidthManual = GetParam(kParamPulseWidthManual)->Value() / 100.0;
   config.lfoRate = GetParam(kParamLfoRate)->Value();
+    // env generator
+  config.attack = GetParam(kParamAttack)->Value();
+  config.decay = GetParam(kParamDecay)->Value();
+  config.sustain = GetParam(kParamSustain)->Value();
+  config.release = GetParam(kParamRelease)->Value();
 
   const int nChans = NOutChansConnected();
   config.samplerate = GetSampleRate();
