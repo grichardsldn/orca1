@@ -14,6 +14,7 @@ class OrcaDSP {
 
     // state
     double lfoValue;
+    double currentNote = 0;
 
     public:
     // methods
@@ -24,10 +25,13 @@ class OrcaDSP {
     }
 
     void NoteOn(int note, int velocity) {
+        currentNote = note;
         channel->Trigger(note, (double)velocity);
     };
     void NoteOff(int note) {
-        channel->Release();
+        if (note == currentNote) {
+            channel->Release();
+        } // else it's some previous note
     }
 
     iplug::sample Tick() {
