@@ -36,14 +36,21 @@ class ADSR {
                 output += *attackRate / (double)*samplerate / 1000.0;
                 if (output > 1.0) {
                     output = 1.0;
+                    state = decay;
+                }
+            break;
+            case decay:
+                output -= *decayRate / (double)*samplerate / 1000.9;
+                if (output < *sustainLevel) {
+                    output = *sustainLevel;
                     state = sustain;
                 }
             break;
             case sustain:
-                output = 1.0;
+                output = *sustainLevel;
             break;
             case release:
-                output -= *decayRate / (double)*samplerate / 1000.9;
+                output -= *releaseRate / (double)*samplerate / 1000.9;
                 if (output < 0) {
                     output = 0.0;
                     state = idle;
