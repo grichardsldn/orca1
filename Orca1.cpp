@@ -61,10 +61,11 @@ Orca1::Orca1(const InstanceInfo& info)
   GetParam(kParamVCFBend)->InitDouble("FBend", 100., 0., 100.0, 0.01, "");
   
   // env generator
-  GetParam(kParamAttack)->InitDouble("Attack", 100., 0., 10000.0, 0.01, "");
-  GetParam(kParamDecay)->InitDouble("Decay", 100., 0., 10000.0, 0.01, "");
+  GetParam(kParamAttack)->InitDouble("Attack", 100., 0., 10000.0, 0.01, "",IParam::kFlagsNone, "ADSR", IParam::ShapePowCurve(3.));
+  
+  GetParam(kParamDecay)->InitDouble("Decay", 100., 0., 10000.0, 0.01, "",IParam::kFlagsNone, "ADSR", IParam::ShapePowCurve(3.));
   GetParam(kParamSustain)->InitDouble("Sustain", 0.2, 0., 1.0, 0.01, "");
-  GetParam(kParamRelease)->InitDouble("Release", 300., 0., 10000.0, 0.01, "");
+  GetParam(kParamRelease)->InitDouble("Release", 300., 0., 10000.0, 0.01, "",IParam::kFlagsNone, "ADSR", IParam::ShapePowCurve(3.));
   
   GetParam(kParamTune)->InitDouble("Tune", 0., -100., 100.0, 0.05, "");
   
