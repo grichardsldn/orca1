@@ -50,15 +50,18 @@ class ADSR {
                 output = *sustainLevel;
             break;
             case release:
-                output -= *releaseRate / (double)*samplerate / 1000.9;
+                // above the sustain level, fall at the greater of decay and release
+                double dropRate = *releaseRate;
+                if (output > *sustainLevel && *decayRate > *releaseRate) { 
+                    dropRate = *decayRate;
+                }
+                output -= dropRate / (double)*samplerate / 1000.9;
                 if (output < 0) {
                     output = 0.0;
                     state = idle;
                 }
             break;
-            default:
-                state = idle;
-                output = 0.0;
+
         }
         return this->output;
     };
