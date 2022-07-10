@@ -23,14 +23,15 @@ class OrcaChannel {
 
     // outputs to subcomponents
     double modify_amount;
+    double pulseWidth = 0.0;
+
     public:
     OrcaChannel(const OrcaConfig *config, const double *lfo) {
         this->config = config;
         this->lfo = lfo;
-
-        tonegen = new OrcaTonegen(&note, &config->samplerate, &modify_amount, &config->pulseWidthManual);
+        tonegen = new OrcaTonegen(&note, &config->samplerate, &modify_amount, &pulseWidth);
         filter = new Filter( &config->samplerate);
-        adsr = new ADSR(&config->samplerate);
+        adsr = new ADSR(&config->samplerate, &config->attack, &config->decay, &config->sustain, &config->release);
     };
 
     void Trigger( int note, double velocity ) {
@@ -44,13 +45,26 @@ class OrcaChannel {
     };
 
     double Tick() {
-        // set the modify amount
-        modify_amount = config->pulseWidthManual; // for now stick to 'manual'   
+        const double envelope = adsr->Tick();
 
+        switch (config->pulseSource ) {
+            case 0:
+            // lfo - NYI
+            break;
+            case 1: // manual
+                pulseWidth = config->pulseWidthManual;
+            break;
+            case 2: // env
+                pulseWidth = config->pulseWidthManual * envelope;
+            break;
+        }
+    
         const double raw_tone = tonegen->Tick();
         const double filtered = filter->Tick(raw_tone);
-      const double envelope = adsr->Tick(filtered);
-        const double enveloped = filtered * envelope;
+        
+        const double attenuation = 1.0 - envelope;
+        const double enveloped = filtered / pow(10.0, attenuation * 2.0);
+
         return enveloped;
     }
 };
