@@ -26,7 +26,7 @@ class ADSR {
         state = idle;
         output = 0.0;
     }
-    double Tick(double input) {
+    double Tick() {
         switch(state) {
             case idle: 
                 output = 0.0;
@@ -67,6 +67,10 @@ class ADSR {
     };
 
     void Trigger() {
+        const double startLevel = 0.2;
+        if (output < startLevel) {
+            output = startLevel; // start with something
+        }
         this->state = attack;
     };
     void Release() {
