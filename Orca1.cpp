@@ -213,6 +213,8 @@ void Orca1::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
   const int nChans = NOutChansConnected();
   config.samplerate = GetSampleRate();
   
+  const int particles[] = {1,4,2,8,3,5,3,1,4,6,4,7,3,1,5,7};
+  
   for (int s = 0; s < nFrames; s++) {
     const iplug::sample output = dsp->Tick();
     for (int c = 0; c < nChans; c++) {
