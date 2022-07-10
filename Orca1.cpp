@@ -195,13 +195,20 @@ Orca1::Orca1(const InstanceInfo& info)
 void Orca1::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
 {
   //const double gain = GetParam(kGain)->Value() / 100.;
+
+  // tone generator
   config.pulseWidthManual = GetParam(kParamPulseWidthManual)->Value() / 100.0;
+  config.pulseSource = GetParam(kParamPulseSource)->Int();
+  
+  // lfo
   config.lfoRate = GetParam(kParamLfoRate)->Value();
-    // env generator
+  // env generator
   config.attack = GetParam(kParamAttack)->Value();
   config.decay = GetParam(kParamDecay)->Value();
   config.sustain = GetParam(kParamSustain)->Value();
   config.release = GetParam(kParamRelease)->Value();
+
+
 
   const int nChans = NOutChansConnected();
   config.samplerate = GetSampleRate();

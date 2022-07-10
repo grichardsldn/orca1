@@ -24,6 +24,7 @@ class OrcaChannel {
     // outputs to subcomponents
     double modify_amount;
     double pulseWidth = 0.0;
+
     public:
     OrcaChannel(const OrcaConfig *config, const double *lfo) {
         this->config = config;
@@ -46,8 +47,18 @@ class OrcaChannel {
     double Tick() {
         const double envelope = adsr->Tick();
 
-        pulseWidth = config->pulseWidthManual * envelope;
-
+        switch (config->pulseSource ) {
+            case 0:
+            // lfo - NYI
+            break;
+            case 1: // manual
+                pulseWidth = config->pulseWidthManual;
+            break;
+            case 2: // env
+                pulseWidth = config->pulseWidthManual * envelope;
+            break;
+        }
+    
         const double raw_tone = tonegen->Tick();
         const double filtered = filter->Tick(raw_tone);
         
