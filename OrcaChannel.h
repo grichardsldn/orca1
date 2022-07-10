@@ -48,8 +48,8 @@ class OrcaChannel {
         const double envelope = adsr->Tick();
 
         switch (config->pulseSource ) {
-            case 0:
-            // lfo - NYI
+            case 0:// lfo
+                pulseWidth = config->pulseWidthManual * ((*lfo + 1.0) / 2.0);
             break;
             case 1: // manual
                 pulseWidth = config->pulseWidthManual;
