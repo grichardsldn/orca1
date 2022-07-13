@@ -30,10 +30,13 @@ class OrcaTonegen {
 
     public:
     OrcaTonegen(const int *note, const int*samplerate, const double* modifyAmount,
-      const double* pulseWidthManual ) {
+      const double* pulseWidthManual, const double* pulseMix, const double* noiseMox ) {
       this->note = note;
       this->samplerate = samplerate;
       this->pulseWidthManual = pulseWidthManual;
+      this->pulseMix = pulseMix;
+      this->noiseMix = noiseMix;
+
       through = 0.0;
       hz = 440.0; // default
     };
@@ -54,7 +57,7 @@ class OrcaTonegen {
       }
 
       const double pulse = pulseFunction(through);
-      return pulse;
+      return pulse * *pulseMix;
     };
 
     void Restart() {
