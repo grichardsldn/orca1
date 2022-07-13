@@ -31,7 +31,7 @@ Orca1::Orca1(const InstanceInfo& info)
   GetParam(kParamPulseWidthManual)->InitDouble("PulseWidthManual", 100., 0., 100.0, 0.01, "%");
   
 //  kParamMixerPulse,
-  GetParam(kParamPulseMix)->InitDouble("PulseMix", 100., 0., 100.0, 0.01, "");
+  GetParam(kParamPulseMix)->InitDouble("PulseMix", 1., 0., 1.0, 0.01, "",IParam::kFlagsNone, "Mix", IParam::ShapePowCurve(2.));
   
 //  kParamMixerSaw,
   GetParam(kParamSawMix)->InitDouble("SawMix", 100., 0., 100.0, 0.01, "");
@@ -40,7 +40,7 @@ Orca1::Orca1(const InstanceInfo& info)
   GetParam(kParamSubMix)->InitDouble("SubMix", 100., 0., 100.0, 0.01, "");
   
 //  kParamMixerNoise,
-  GetParam(kParamNoiseMix)->InitDouble("NoiseMix", 100., 0., 100.0, 0.01, "");
+  GetParam(kParamNoiseMix)->InitDouble("NoiseMix", 1., 0., 1.0, 0.01, "",IParam::kFlagsNone, "Mix", IParam::ShapePowCurve(2.));
   
 //  kParamVCFFreq,
   GetParam(kParamVCFFreq)->InitDouble("Freq", 100., 0., 100.0, 0.01, "");
@@ -199,7 +199,8 @@ void Orca1::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
   // tone generator
   config.pulseWidthManual = GetParam(kParamPulseWidthManual)->Value() / 100.0;
   config.pulseSource = GetParam(kParamPulseSource)->Int();
-
+  config.pulseMix = GetParam(kParamPulseMix)->Value();
+  config.noiseMix = GetParam(kParamNoiseMix)->Value();
   // lfo
   config.lfoRate = GetParam(kParamLfoRate)->Value();
   // env generator
