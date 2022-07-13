@@ -61,7 +61,7 @@ class OrcaTonegen {
 
       const double pulse = pulseFunction(through) * *pulseMix;
       const double noise = noiseFunction() * *noiseMix;
-      return pulse + noise) / 2.;
+      return (pulse + noise) / 2.;
     };
 
     void Restart() {
