@@ -18,6 +18,16 @@ class OrcaTonegen {
     double through;  // 0 > 1
     double hz;
 
+    private:
+    // functions
+    double pulseFunction(double through) {
+      if( through > (0.5 + (*pulseWidthManual/1.8)) ){
+        return 1.0;
+      } else {
+        return -1.0;
+      }
+    };
+
     public:
     OrcaTonegen(const int *note, const int*samplerate, const double* modifyAmount,
       const double* pulseWidthManual ) {
@@ -42,11 +52,9 @@ class OrcaTonegen {
       if (through > 1.0) {
         through -= 1.0;
       }
-      if( through > (0.5 + (*pulseWidthManual/1.8)) ){
-        return 1.0;
-      } else {
-        return -1.0;
-      }
+
+      const double pulse = pulseFunction(through);
+      return pulse;
     };
 
     void Restart() {
