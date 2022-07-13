@@ -26,4 +26,8 @@ struct OrcaConfig {
     double decay; // ms to full fall
     double sustain; // sustain level
     double release; // ms to full fall
+
+    // filter
+    double filterFrequency;
+    double filterResonance;
 };

@@ -43,10 +43,10 @@ Orca1::Orca1(const InstanceInfo& info)
   GetParam(kParamNoiseMix)->InitDouble("NoiseMix", 1., 0., 1.0, 0.01, "",IParam::kFlagsNone, "Mix", IParam::ShapePowCurve(2.));
   
 //  kParamVCFFreq,
-  GetParam(kParamVCFFreq)->InitDouble("Freq", 100., 0., 100.0, 0.01, "");
+  GetParam(kParamFilterFrequency)->InitDouble("Freq", 1., 0., 1.0, 0.01, "");
   
 //  kParamVCFResonanse,
-  GetParam(kParamVCFResonanse)->InitDouble("Res", 100., 0., 100.0, 0.01, "");
+  GetParam(kParamFilterResonance)->InitDouble("Res", 1., 0., 1.0, 0.01, "");
   
 //  kParamVCFEnv,
   GetParam(kParamVCFEnv)->InitDouble("FEnv", 100., 0., 100.0, 0.01, "");
@@ -155,9 +155,9 @@ Orca1::Orca1(const InstanceInfo& info)
                                                DEFAULT_STYLE.WithShowValue(false)));
     
     // filterControls
-    pGraphics->AttachControl(new IVKnobControl(filterControls.GetGridCell(0,2,5).GetCentredInside(size), kParamVCFFreq, "Freq",
+    pGraphics->AttachControl(new IVKnobControl(filterControls.GetGridCell(0,2,5).GetCentredInside(size), kParamFilterFrequency, "Freq",
                                                DEFAULT_STYLE.WithShowValue(false)));
-    pGraphics->AttachControl(new IVKnobControl(filterControls.GetGridCell(1,2,5).GetCentredInside(size), kParamVCFResonanse, "Res",
+    pGraphics->AttachControl(new IVKnobControl(filterControls.GetGridCell(1,2,5).GetCentredInside(size), kParamFilterResonance, "Res",
                                                DEFAULT_STYLE.WithShowValue(false)));
     pGraphics->AttachControl(new IVKnobControl(filterControls.GetGridCell(5,2,5).GetCentredInside(size), kParamVCFEnv, "Env",
                                                DEFAULT_STYLE.WithShowValue(false)));
@@ -208,8 +208,9 @@ void Orca1::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
   config.decay = GetParam(kParamDecay)->Value();
   config.sustain = GetParam(kParamSustain)->Value();
   config.release = GetParam(kParamRelease)->Value();
-
-
+  // filter
+  config.filterFrequency = GetParam(kParamFilterFrequency)->Value();
+  config.filterResonance = GetParam(kParamFilterResonance)->Value();
 
   const int nChans = NOutChansConnected();
   config.samplerate = GetSampleRate();
