@@ -225,16 +225,40 @@ void Orca1::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
 
 
   const int nChans = NOutChansConnected();
-  config.samplerate = GetSampleRate();
+  const int realSamplerate = GetSampleRate();
   
   const int particles[] = {1,4,2,8,3,5,3,1,4,6,4,7,3,1,5,7};
-  
-  for (int s = 0; s < nFrames; s++) {
-    const iplug::sample output = dsp->Tick();
-    for (int c = 0; c < nChans; c++) {
-      outputs[c][s] = output;
+  //const int particles[] = {4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4};
+
+  if (1) {
+    sample hiRes[16 * 4];
+    for (int s = 0; s < nFrames; s+= 16) {
+      int hiResIndex = 0;
+      for (int t = 0; t<16; t++) {
+        const int particleLength = particles[t];
+        config.samplerate =  realSamplerate / particleLength * 4;
+        const sample tickOutput = dsp->Tick();
+        for (int st=0;st<particleLength;st++) {
+          hiRes[hiResIndex++] = tickOutput;
+        }
+      }
+      for (int t = 0; t<16; t++) {
+        const sample lowResOutput = (hiRes[t*4] + hiRes[(t*4)+1] + hiRes[(t*4)+2] + hiRes[(t*4)+3]) / 4.0;
+        for (int c = 0; c < nChans; c++) {
+          outputs[c][s+t] = lowResOutput;
+        }
+      }
     }
+  } else {
+    config.samplerate = GetSampleRate();
+    for (int s = 0; s < nFrames; s++) {
+      const iplug::sample output = dsp->Tick();
+       for (int c = 0; c < nChans; c++) {
+         outputs[c][s] = output;
+        }
+      }
   }
+  
 }
 
 void Orca1::OnIdle()
