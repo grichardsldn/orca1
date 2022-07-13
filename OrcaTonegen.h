@@ -27,10 +27,13 @@ class OrcaTonegen {
         return -1.0;
       }
     };
+    double noiseFunction() {
+      return ((double)(rand()%256)-128.0) / 128.0;
+    }
 
     public:
     OrcaTonegen(const int *note, const int*samplerate, const double* modifyAmount,
-      const double* pulseWidthManual, const double* pulseMix, const double* noiseMox ) {
+      const double* pulseWidthManual, const double* pulseMix, const double* noiseMix ) {
       this->note = note;
       this->samplerate = samplerate;
       this->pulseWidthManual = pulseWidthManual;
@@ -56,8 +59,9 @@ class OrcaTonegen {
         through -= 1.0;
       }
 
-      const double pulse = pulseFunction(through);
-      return pulse * *pulseMix;
+      const double pulse = pulseFunction(through) * *pulseMix;
+      const double noise = noiseFunction() * *noiseMix;
+      return pulse + noise) / 2.;
     };
 
     void Restart() {
