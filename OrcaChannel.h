@@ -24,13 +24,14 @@ class OrcaChannel {
     // outputs to subcomponents
     double modify_amount;
     double pulseWidth = 0.0;
-
+    double filterAmount = 0.0;
+  
     public:
     OrcaChannel(const OrcaConfig *config, const double *lfo) {
         this->config = config;
         this->lfo = lfo;
         tonegen = new OrcaTonegen(&note, &config->samplerate, &modify_amount, &pulseWidth, &config->pulseMix, &config->noiseMix);
-        filter = new Filter( &config->samplerate, &config->filterFrequency, &config->filterResonance);
+        filter = new Filter( &config->samplerate, &filterAmount, &config->filterResonance);
         adsr = new ADSR(&config->samplerate, &config->attack, &config->decay, &config->sustain, &config->release);
     };
 
@@ -46,7 +47,8 @@ class OrcaChannel {
 
     double Tick() {
         const double envelope = adsr->Tick();
-
+        filterAmount = envelope * config->filterFrequency;
+        
         switch (config->pulseSource ) {
             case 0:// lfo
                 pulseWidth = config->pulseWidthManual * ((*lfo + 1.0) / 2.0);

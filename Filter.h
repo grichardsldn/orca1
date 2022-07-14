@@ -18,10 +18,23 @@ class Filter {
         this->resonance = resonance;
     }
     double Tick(double input) {
+        input /= 2.;
         double diff = input - pos;
-        vel += diff / *samplerate * 1000.0 * *frequency;
-        vel += input / *samplerate * 1000.0;
-        vel *= (1.0 - *resonance);
+        double restoring = (0 - pos) * 0.1;
+        vel += (diff + restoring) / *samplerate * 1000.0 * *frequency;
+        vel *= *resonance;
+         
+        // end stops
+        if (pos > 1.0) {
+            if (vel>0.0) {
+                vel = 0.0;
+            }
+        }
+        if (pos < -1.0) {
+            if (vel<0.0) {
+                vel = 0.0;
+            }
+        }
         pos += vel;
         return pos;
     }
