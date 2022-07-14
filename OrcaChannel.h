@@ -18,7 +18,9 @@ class OrcaChannel {
 
     // components
     OrcaTonegen* tonegen;
-    Filter* filter;
+    Filter* filter1;
+    Filter* filter2;
+
     ADSR *adsr;
 
     // outputs to subcomponents
@@ -31,7 +33,8 @@ class OrcaChannel {
         this->config = config;
         this->lfo = lfo;
         tonegen = new OrcaTonegen(&note, &config->samplerate, &modify_amount, &pulseWidth, &config->pulseMix, &config->noiseMix);
-        filter = new Filter( &config->samplerate, &filterAmount, &config->filterResonance);
+        filter1 = new Filter( &config->samplerate, &filterAmount, &config->filterResonance);
+        filter2 = new Filter( &config->samplerate, &filterAmount, &config->filterResonance);
         adsr = new ADSR(&config->samplerate, &config->attack, &config->decay, &config->sustain, &config->release);
     };
 
@@ -62,7 +65,7 @@ class OrcaChannel {
         }
     
         const double raw_tone = tonegen->Tick();
-        const double filtered = filter->Tick(raw_tone);
+        const double filtered = filter1->Tick(filter2->Tick(raw_tone));
         
         const double attenuation = 1.0 - envelope;
         const double enveloped = filtered / pow(10.0, attenuation * 2.0);
