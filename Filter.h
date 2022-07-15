@@ -6,16 +6,18 @@ class Filter {
     const int* samplerate;
     const double *frequency;
     const double *resonance;
+    const double *testParam;
 
     // state
     double pos = 0.0;
     double vel = 0.0;
 
     public:
-    Filter(const int*samplerate, const double *freq, const double *resonance) {
+    Filter(const int*samplerate, const double *freq, const double *resonance, const double *testParam) {
         this->samplerate = samplerate;
         this->frequency = freq;
         this->resonance = resonance;
+        this->testParam = testParam;
     }
     double Tick(double input) {
         input /= 2.;

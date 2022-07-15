@@ -68,7 +68,8 @@ Orca1::Orca1(const InstanceInfo& info)
   GetParam(kParamRelease)->InitDouble("Release", 300., 50.0, 20000.0, 0.01, "",IParam::kFlagsNone, "ADSR", IParam::ShapePowCurve(3.));
   
   GetParam(kParamTune)->InitDouble("Tune", 0., -100., 100.0, 0.05, "");
-  
+  GetParam(kParamVolume)->InitDouble("Volume", 1.0,0.0,1.0,0.1,"");
+
   // GetParam(kParamNoteGlideTime)->InitMilliseconds("Note Glide Time", 0., 0.0, 30.);
   // GetParam(kParamAttack)->InitDouble("Attack", 10., 1., 1000., 0.1, "ms", IParam::kFlagsNone, "ADSR", IParam::ShapePowCurve(3.));
   
@@ -211,6 +212,9 @@ void Orca1::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
   // filter
   config.filterFrequency = GetParam(kParamFilterFrequency)->Value();
   config.filterResonance = GetParam(kParamFilterResonance)->Value();
+
+  // global
+  config.volume = GetParam(kParamVolume)->Value();
 
   const int nChans = NOutChansConnected();
   config.samplerate = GetSampleRate();
