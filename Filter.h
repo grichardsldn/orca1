@@ -22,7 +22,8 @@ class Filter {
     double Tick(double input) {
         input /= 2.;
         double diff = input - pos;
-        double restoring = (0 - pos) * 0.00001;
+        double restoring = (0 - pos);
+        restoring *= *testParam * *testParam;
         vel += (diff + restoring) / *samplerate * 1000.0 * *frequency;
         vel *= *resonance;
          
