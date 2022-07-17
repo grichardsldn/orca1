@@ -34,6 +34,14 @@ class OrcaChannel {
         adsr = new ADSR(&config->samplerate, &config->attack, &config->decay, &config->sustain, &config->release);
     };
 
+    int getNote() {
+        return note;
+    }
+
+    State getState() {
+        return adsr->getState();
+    }
+
     void Trigger( int note, double velocity ) {
         this->note = note;
         this->velocity = velocity;
