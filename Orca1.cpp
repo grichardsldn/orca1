@@ -11,7 +11,7 @@ Orca1::Orca1(const InstanceInfo& info)
   GetParam(kParamPulseSource)->InitEnum("Source", 0, {"LFO", "Manual", "Env"} );
   GetParam(kParamSubType)->InitEnum("Sub", 0, {"1 Oct sq", "2 Oct sq", "2 oct pulse"} );
   GetParam(kParamVCAType)->InitEnum("Amp", 0, {"Env", "Gate"} );
-  GetParam(kParamVCOMode)->InitEnum("Mode", 0, {"Poly", "Mono"} );
+  GetParam(kParamPoly)->InitEnum("Mode", 0, {"Poly", "Mono"} );
 //  kParamPortamento,
   GetParam(kParamPortamento)->InitDouble("Glide", 0., 0., 100.0, 0.01, "");
   
@@ -121,7 +121,7 @@ Orca1::Orca1(const InstanceInfo& info)
     pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(7,2,5).GetCentredInside(size), kParamVCOMod, "Mod",
                                                DEFAULT_STYLE.WithShowValue(false)));
 
-    pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(8,2,5).GetCentredInside(size), kParamVCOMode, "Mode"), kNoTag, "Mode")->DisablePrompt(false);
+    pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(8,2,5).GetCentredInside(size), kParamPoly, "Mode"), kNoTag, "Mode")->DisablePrompt(false);
     
         
     // modControls
@@ -215,6 +215,8 @@ void Orca1::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
 
   // global
   config.volume = GetParam(kParamVolume)->Value();
+  config.poly = GetParam(kParamPoly)->Int();
+
 
   const int nChans = NOutChansConnected();
   config.samplerate = GetSampleRate();

@@ -26,6 +26,11 @@ class ADSR {
         state = idle;
         output = 0.0;
     }
+
+    State getState() {
+        return state;
+    }
+
     double Tick() {
         switch(state) {
             case idle: 
