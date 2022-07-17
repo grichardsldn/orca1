@@ -58,8 +58,8 @@ class OrcaChannel {
 
     double Tick() {
         const double envelope = adsr->Tick();
-        // filterAmount = envelope * config->filterFrequency;
-        filterAmount = config->filterFrequency;
+        
+        filterAmount = (config->filterEnv * envelope) + config->filterFrequency;
 
         switch (config->pulseSource ) {
             case 0:// lfo

@@ -29,8 +29,8 @@ enum EParams
   kParamNoiseMix,
   kParamFilterFrequency,
   kParamFilterResonance,
-  kParamVCFEnv,
-  kParamFilterEnvMod,
+  kParamFilterEnv,
+  kParamFilterMod,
   kParamVCFKeyboard,
   kParamVCFBend,
   kParamVCAType, // env/gate

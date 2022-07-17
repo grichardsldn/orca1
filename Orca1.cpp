@@ -48,10 +48,9 @@ Orca1::Orca1(const InstanceInfo& info)
 //  kParamVCFResonanse,
   GetParam(kParamFilterResonance)->InitDouble("Res", 1., 0., 1.0, 0.01, "");
   
-//  kParamVCFEnv,
-  GetParam(kParamVCFEnv)->InitDouble("FEnv", 100., 0., 100.0, 0.01, "");
+  GetParam(kParamFilterEnv)->InitDouble("FEnv", 0.5, 0., 1.0, 0.01, "");
   
-  GetParam(kParamFilterEnvMod)->InitDouble("FMod", 0.5, 0., 1.0, 0.01, "");
+  GetParam(kParamFilterMod)->InitDouble("FMod", 0.5, 0., 1.0, 0.01, "");
   
 //  kParamVCFKeyboard,
   GetParam(kParamVCFKeyboard)->InitDouble("FKey", 100., 0., 100.0, 0.01, "");
@@ -159,9 +158,9 @@ Orca1::Orca1(const InstanceInfo& info)
                                                DEFAULT_STYLE.WithShowValue(false)));
     pGraphics->AttachControl(new IVKnobControl(filterControls.GetGridCell(1,2,5).GetCentredInside(size), kParamFilterResonance, "Res",
                                                DEFAULT_STYLE.WithShowValue(false)));
-    pGraphics->AttachControl(new IVKnobControl(filterControls.GetGridCell(5,2,5).GetCentredInside(size), kParamVCFEnv, "Env",
+    pGraphics->AttachControl(new IVKnobControl(filterControls.GetGridCell(5,2,5).GetCentredInside(size), kParamFilterEnv, "Env",
                                                DEFAULT_STYLE.WithShowValue(false)));
-    pGraphics->AttachControl(new IVKnobControl(filterControls.GetGridCell(6,2,5).GetCentredInside(size), kParamFilterEnvMod, "Mod",
+    pGraphics->AttachControl(new IVKnobControl(filterControls.GetGridCell(6,2,5).GetCentredInside(size), kParamFilterMod, "Mod",
                                                DEFAULT_STYLE.WithShowValue(false)));
     pGraphics->AttachControl(new IVKnobControl(filterControls.GetGridCell(7,2,5).GetCentredInside(size), kParamVCFKeyboard, "Kbd",
                                                DEFAULT_STYLE.WithShowValue(false)));
@@ -211,7 +210,7 @@ void Orca1::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
   // filter
   config.filterFrequency = GetParam(kParamFilterFrequency)->Value();
   config.filterResonance = GetParam(kParamFilterResonance)->Value();
-  config.filterEnvMod = GetParam(kParamFilterEnvMod)->Value();
+  config.filterEnv = GetParam(kParamFilterEnv)->Value();
 
   // global
   config.volume = GetParam(kParamVolume)->Value();
