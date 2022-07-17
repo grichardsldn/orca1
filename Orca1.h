@@ -31,7 +31,7 @@ enum EParams
   kParamFilterResonance,
   kParamFilterEnv,
   kParamFilterMod,
-  kParamVCFKeyboard,
+  kParamFilterKey,
   kParamVCFBend,
   kParamVCAType, // env/gate
   kParamAttack,

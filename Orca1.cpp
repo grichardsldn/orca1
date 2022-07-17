@@ -52,8 +52,7 @@ Orca1::Orca1(const InstanceInfo& info)
   
   GetParam(kParamFilterMod)->InitDouble("FMod", 0.5, 0., 1.0, 0.01, "");
   
-//  kParamVCFKeyboard,
-  GetParam(kParamVCFKeyboard)->InitDouble("FKey", 100., 0., 100.0, 0.01, "");
+  GetParam(kParamFilterKey)->InitDouble("FKey", 0.5, 0., 1.0, 0.01, "");
   
 //  kParamVCFBend,
   GetParam(kParamVCFBend)->InitDouble("FBend", 100., 0., 100.0, 0.01, "");
@@ -162,7 +161,7 @@ Orca1::Orca1(const InstanceInfo& info)
                                                DEFAULT_STYLE.WithShowValue(false)));
     pGraphics->AttachControl(new IVKnobControl(filterControls.GetGridCell(6,2,5).GetCentredInside(size), kParamFilterMod, "Mod",
                                                DEFAULT_STYLE.WithShowValue(false)));
-    pGraphics->AttachControl(new IVKnobControl(filterControls.GetGridCell(7,2,5).GetCentredInside(size), kParamVCFKeyboard, "Kbd",
+    pGraphics->AttachControl(new IVKnobControl(filterControls.GetGridCell(7,2,5).GetCentredInside(size), kParamFilterKey, "Kbd",
                                                DEFAULT_STYLE.WithShowValue(false)));
     pGraphics->AttachControl(new IVKnobControl(filterControls.GetGridCell(8,2,5).GetCentredInside(size), kParamVCFBend, "Bend",
                                                DEFAULT_STYLE.WithShowValue(false)));
@@ -211,6 +210,7 @@ void Orca1::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
   config.filterFrequency = GetParam(kParamFilterFrequency)->Value();
   config.filterResonance = GetParam(kParamFilterResonance)->Value();
   config.filterEnv = GetParam(kParamFilterEnv)->Value();
+  config.filterKey = GetParam(kParamFilterKey)->Value();
 
   // global
   config.volume = GetParam(kParamVolume)->Value();

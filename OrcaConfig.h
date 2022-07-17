@@ -32,4 +32,5 @@ struct OrcaConfig {
     double filterFrequency;
     double filterResonance;
     double filterEnv;
+    double filterKey;
 };
