@@ -30,7 +30,7 @@ enum EParams
   kParamFilterFrequency,
   kParamFilterResonance,
   kParamVCFEnv,
-  kParamVCFMod,
+  kParamFilterEnvMod,
   kParamVCFKeyboard,
   kParamVCFBend,
   kParamVCAType, // env/gate
