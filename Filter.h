@@ -21,24 +21,27 @@ class Filter {
     }
     double Tick(double input) {
         input /= 2.;
-        double diff = input - pos;
-        double restoring = (0 - pos);
-        restoring *= *testParam * *testParam;
-        vel += (diff + restoring) / *samplerate * 1000.0 * *frequency;
-        vel *= *resonance;
-         
+        double inputForce = input - pos;
+        double restoringForce = (0 - pos) * *testParam;
+        double mass = 2000.0 / (*frequency * *frequency);
+        double resistance = vel * -1.0 * *resonance;
+
+         vel += (inputForce + restoringForce + resistance) / mass / (*samplerate);
+         pos += vel;
         // end stops
         if (pos > 1.0) {
+            pos = 1.0;
             if (vel>0.0) {
                 vel = 0.0;
             }
         }
         if (pos < -1.0) {
+            pos = -1.0;
             if (vel<0.0) {
                 vel = 0.0;
             }
         }
-        pos += vel;
+        
         return pos;
     }
 };

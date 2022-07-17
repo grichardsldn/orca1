@@ -60,8 +60,8 @@ class OrcaChannel {
         const double envelope = adsr->Tick();
         filterAmount = 
             (config->filterEnv * envelope) 
-            + (config->filterKey * (((double)note - 60.0) / 10.0))
-            + config->filterFrequency
+            * (config->filterKey * (((double)note - 60.0) / 10.0))
+            * config->filterFrequency
         ;
 
         switch (config->pulseSource ) {
