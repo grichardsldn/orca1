@@ -2,14 +2,16 @@
 
 #include "OrcaChannel.h"
 #include "LFO.h"
+#include "ADSR.h"
 
+#define NUM_CHANNELS (8)
 class OrcaDSP {
     public:
     const OrcaConfig* config;
 
     private:
     //components
-    OrcaChannel* channel;
+    OrcaChannel* channels[8];
     LFO* lfo;
 
     // state
@@ -21,24 +23,68 @@ class OrcaDSP {
     OrcaDSP(const OrcaConfig* config) {
         this->config = config;
         lfo = new LFO(&config->lfoRate, &config->samplerate, &config->lfoWaveform);
-        channel = new OrcaChannel(config, &lfoValue);
+        for (int i = 0; i< 8; i++) {
+            channels[i] = new OrcaChannel(config, &lfoValue);
+        }
     }
 
     void NoteOn(int note, int velocity) {
-        currentNote = note;
-        channel->Trigger(note, (double)velocity);
+        if (config->poly == 1) {
+            channels[0]->Trigger(note, (double)velocity);
+        } else {
+            currentNote = note;
+            OrcaChannel *existingChannel = findNote(note);
+            if (existingChannel != NULL) {
+                existingChannel->Trigger(note, (double)velocity);
+                return;
+            }
+            OrcaChannel *channel = idleChannel();
+            if (channel != NULL) {
+                channel->Trigger(note, (double)velocity);
+                return;
+            } 
+        }
     };
+
     void NoteOff(int note) {
-        if (note == currentNote) {
-            channel->Release();
-        } // else it's some previous note
+        if (config->poly == 1) {
+            if (channels[0]->getNote() == note) {
+                channels[0]->Release();
+            }
+        } else {
+            OrcaChannel *channel = findNote(note);
+            if (channel != NULL) {
+                channel->Release();
+            }
+        }
+        
     }
 
     iplug::sample Tick() {
         lfoValue = lfo->Tick();
-        const iplug::sample channel_output = channel->Tick();
-        // return (iplug::sample)((channel_output) * lfoValue);
-        return (iplug::sample)(channel_output);
-        // return (iplug::sample)(channel_output * config.volume);
+        iplug::sample output = 0.0;
+        int numChannels = (config->poly == 1) ? 1:8;
+        for (int i=0;i<numChannels;i++) {
+            output += channels[i]->Tick();
+        }
+        return output;
     };
+
+    private:
+    OrcaChannel* idleChannel() {
+      for (int i = 0 ; i<NUM_CHANNELS;i++) {
+            if (channels[i]->getState() == idle) {
+                return channels[i];
+            }
+        }
+        return NULL;
+    }
+    OrcaChannel* findNote(int note) {
+      for (int i = 0 ; i<NUM_CHANNELS;i++) {
+            if (channels[i]->getNote() == note) {
+                return channels[i];
+            }
+        }
+        return NULL;
+    }
 };
