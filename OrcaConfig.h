@@ -7,6 +7,7 @@ struct OrcaConfig {
   
     // global
     double volume;
+    int poly;
   
     // internal
     int samplerate;
