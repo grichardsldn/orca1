@@ -29,23 +29,35 @@ class OrcaDSP {
     }
 
     void NoteOn(int note, int velocity) {
-        currentNote = note;
-        OrcaChannel *existingChannel = findNote(note);
-        if (existingChannel != NULL) {
-            existingChannel->Trigger(note, (double)velocity);
-            return;
+        if (config->poly == 1) {
+            channels[0]->Trigger(note, (double)velocity);
+        } else {
+            currentNote = note;
+            OrcaChannel *existingChannel = findNote(note);
+            if (existingChannel != NULL) {
+                existingChannel->Trigger(note, (double)velocity);
+                return;
+            }
+            OrcaChannel *channel = idleChannel();
+            if (channel != NULL) {
+                channel->Trigger(note, (double)velocity);
+                return;
+            } 
         }
-        OrcaChannel *channel = idleChannel();
-        if (channel != NULL) {
-            channel->Trigger(note, (double)velocity);
-            return;
-        }   
     };
+
     void NoteOff(int note) {
-        OrcaChannel *channel = findNote(note);
-        if (channel != NULL) {
-            channel->Release();
+        if (config->poly == 1) {
+            if (channels[0]->getNote() == note) {
+                channels[0]->Release();
+            }
+        } else {
+            OrcaChannel *channel = findNote(note);
+            if (channel != NULL) {
+                channel->Release();
+            }
         }
+        
     }
 
     iplug::sample Tick() {
