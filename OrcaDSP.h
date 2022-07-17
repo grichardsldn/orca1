@@ -63,7 +63,8 @@ class OrcaDSP {
     iplug::sample Tick() {
         lfoValue = lfo->Tick();
         iplug::sample output = 0.0;
-        for (int i=0;i<8;i++) {
+        int numChannels = (config->poly == 1) ? 1:8;
+        for (int i=0;i<numChannels;i++) {
             output += channels[i]->Tick();
         }
         return output;
