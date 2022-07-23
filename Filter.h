@@ -23,11 +23,17 @@ class Filter {
         input /= 2.;
         double inputForce = input - pos;
         double restoringForce = (0 - pos) * *testParam;
-        double mass = 2000.0 / (*frequency * *frequency);
-        double resistance = vel * -1.0 * *resonance;
 
-         vel += (inputForce + restoringForce + resistance) / mass / (*samplerate);
-         pos += vel;
+        double mass = 2000.0 / (*frequency * *frequency);
+        double resistance = vel * -1.0 * *testParam;
+
+        double impulse = (inputForce + restoringForce + resistance) / mass / (*samplerate);
+        vel += impulse;
+
+        pos += vel * *resonance;
+        pos += impulse * (1.0 - *resonance) * 5.0;
+        
+
         // end stops
         if (pos > 1.0) {
             pos = 1.0;
