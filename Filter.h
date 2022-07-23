@@ -25,7 +25,7 @@ class Filter {
         double restoringForce = (0 - pos) * *testParam;
 
         double mass = 2000.0 / (*frequency * *frequency);
-        double resistance = vel * -1.0 * *testParam;
+        double resistance = vel * -1.0 * 0.01;
 
         double impulse = (inputForce + restoringForce + resistance) / mass / (*samplerate);
         vel += impulse;
