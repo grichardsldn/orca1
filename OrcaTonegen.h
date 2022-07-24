@@ -6,6 +6,7 @@ class OrcaTonegen {
     // params
     const int* note;
     const int* samplerate;
+    const int* range;
     const double* modifyAmount;
     const double* sawMix;
     const double* pulseMix;
@@ -21,6 +22,7 @@ class OrcaTonegen {
     private:
     // functions
     double pulseFunction(double through) {
+      through = fmod(through, 1.0);
       if( through > (0.5 + (*pulseWidthManual/1.8)) ){
         return 1.0;
       } else {
@@ -32,8 +34,10 @@ class OrcaTonegen {
     }
 
     public:
-    OrcaTonegen(const int *note, const int*samplerate, const double* modifyAmount,
+    OrcaTonegen(const int *note, const int*samplerate, const int *range, const double* modifyAmount,
       const double* pulseWidthManual, const double* pulseMix, const double* noiseMix ) {
+        
+      this->range = range;
       this->note = note;
       this->samplerate = samplerate;
       this->pulseWidthManual = pulseWidthManual;
@@ -59,7 +63,23 @@ class OrcaTonegen {
         through -= 1.0;
       }
 
-      const double pulse = pulseFunction(through) * *pulseMix;
+      double speed = 1.0;
+      switch (*range) {
+        case 0:
+          speed = 1.0;
+        break;
+        case 1: 
+          speed = 2.0;
+        break;
+        case 2:
+          speed = 4.0;
+        break;
+        case 3:
+          speed = 8.0;
+        break;
+      }
+
+      const double pulse = pulseFunction(through * speed) * *pulseMix;
       const double noise = noiseFunction() * *noiseMix;
       return (pulse + noise) / 2.;
     };

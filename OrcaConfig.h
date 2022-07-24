@@ -21,7 +21,7 @@ struct OrcaConfig {
     // tone generator
     double pulseWidthManual;
     int pulseSource;
-    double range;
+    int range;
 
     // envelope generator
     double attack; // ms to full rise
