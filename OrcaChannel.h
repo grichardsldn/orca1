@@ -59,11 +59,6 @@ class OrcaChannel {
     double Tick() {
         const double envelope = adsr->Tick();
 
-        // filterAmount = 
-        //     (config->filterEnv * (envelope - 0.5)) + 0.5
-        //    // + (config->filterKey * (((double)note - 60.0) / 10.0))
-        //     * config->filterFrequency;
-        // ;
         filterOctave = config->filterFrequency
             + (((config->filterEnv * (envelope - 0.5)) + 0.5) * 2.0)
             + (config->filterKey * (((double)note  / 12.0) - 4.0))

@@ -34,7 +34,6 @@ class Filter {
         pos += vel * *resonance;
         pos += impulse * (1.0 - *resonance) * 5.0;
         
-
         // end stops
         if (pos > 1.0) {
             pos = 1.0;
