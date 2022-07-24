@@ -50,7 +50,7 @@ Orca1::Orca1(const InstanceInfo& info)
   
   GetParam(kParamFilterEnv)->InitDouble("FEnv", 0.5, 0., 1.0, 0.01, "");
   
-  GetParam(kParamFilterMod)->InitDouble("FMod", 0.5, 0., 1.0, 0.01, "");
+  GetParam(kParamFilterLfo)->InitDouble("FLFO", 0.1, 0., 1.0, 0.01, "");
   
   GetParam(kParamFilterKey)->InitDouble("FKey", 0.5, 0., 1.0, 0.01, "");
   
@@ -159,7 +159,7 @@ Orca1::Orca1(const InstanceInfo& info)
                                                DEFAULT_STYLE.WithShowValue(false)));
     pGraphics->AttachControl(new IVKnobControl(filterControls.GetGridCell(5,2,5).GetCentredInside(size), kParamFilterEnv, "Env",
                                                DEFAULT_STYLE.WithShowValue(false)));
-    pGraphics->AttachControl(new IVKnobControl(filterControls.GetGridCell(6,2,5).GetCentredInside(size), kParamFilterMod, "Mod",
+    pGraphics->AttachControl(new IVKnobControl(filterControls.GetGridCell(6,2,5).GetCentredInside(size), kParamFilterLfo, "LFO",
                                                DEFAULT_STYLE.WithShowValue(false)));
     pGraphics->AttachControl(new IVKnobControl(filterControls.GetGridCell(7,2,5).GetCentredInside(size), kParamFilterKey, "Kbd",
                                                DEFAULT_STYLE.WithShowValue(false)));
@@ -211,6 +211,7 @@ void Orca1::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
   config.filterResonance = GetParam(kParamFilterResonance)->Value();
   config.filterEnv = GetParam(kParamFilterEnv)->Value();
   config.filterKey = GetParam(kParamFilterKey)->Value();
+  config.filterLfo = GetParam(kParamFilterLfo)->Value();
 
   // global
   config.volume = GetParam(kParamVolume)->Value();

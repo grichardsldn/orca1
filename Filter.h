@@ -6,16 +6,18 @@ class Filter {
     const int* samplerate;
     const double *octaveNumber; // 0-8 Middle A  (a4) is in octave 4
     const double *resonance;
+    const double *lfo;
 
     // state
     double pos = 0.0;
     double vel = 0.0;
 
     public:
-    Filter(const int*samplerate, const double *octaveNumber, const double *resonance) {
+    Filter(const int*samplerate, const double *octaveNumber, const double *resonance, const double *lfo) {
         this->samplerate = samplerate;
         this->octaveNumber = octaveNumber;
         this->resonance = resonance;
+        this->lfo = lfo;
     }
     double Tick(double input) {
         double frequency = 27.5 * pow(2, *octaveNumber);

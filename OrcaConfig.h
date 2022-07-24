@@ -33,4 +33,5 @@ struct OrcaConfig {
     double filterResonance;
     double filterEnv;
     double filterKey;
+    double filterLfo;
 };
