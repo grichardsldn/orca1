@@ -7,7 +7,7 @@ Orca1::Orca1(const InstanceInfo& info)
 {
   GetParam(kParamPortamentoType)->InitEnum("P-Mode", 0, {"Auto", "Off", "On"} );
   GetParam(kParamLfoWaveform)->InitEnum("LFOWaveform", 0, {"Triangle", "Square", "Random", "Noise"} );
-  GetParam(kParamVCORange)->InitEnum("Range", 0, {"16", "8", "4", "2"} );
+  GetParam(kParamRange)->InitEnum("Range", 0, {"16", "8", "4", "2"} );
   GetParam(kParamPulseSource)->InitEnum("Source", 0, {"LFO", "Manual", "Env"} );
   GetParam(kParamSubType)->InitEnum("Sub", 0, {"1 Oct sq", "2 Oct sq", "2 oct pulse"} );
   GetParam(kParamVCAType)->InitEnum("Amp", 0, {"Env", "Gate"} );
@@ -105,7 +105,7 @@ Orca1::Orca1(const InstanceInfo& info)
     const IRECT outputControls = b.GetGridCell(4,1,5);
     const int size = 50;
     // oscControls
-    pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(0,2,5).GetCentredInside(size), kParamVCORange, "Range"), kNoTag, "Range")->DisablePrompt(false);
+    pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(0,2,5).GetCentredInside(size), kParamRange, "Range"), kNoTag, "Range")->DisablePrompt(false);
     pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(1,2,5).GetCentredInside(size), kParamPortamento, "Glide",
                                                DEFAULT_STYLE.WithShowValue(false)));
     pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(2,2,5).GetCentredInside(size), kParamPulseWidthManual, "Width",
@@ -199,6 +199,8 @@ void Orca1::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
   config.pulseSource = GetParam(kParamPulseSource)->Int();
   config.pulseMix = GetParam(kParamPulseMix)->Value();
   config.noiseMix = GetParam(kParamNoiseMix)->Value();
+  config.range = GetParam(kParamRange)->Value();
+  
   // lfo
   config.lfoRate = GetParam(kParamLfoRate)->Value();
   // env generator
