@@ -21,14 +21,15 @@ class OrcaTonegen {
 
     private:
     // functions
-    double pulseFunction(double through) {
+    double pulseFunction(double through, double width) {
       through = fmod(through, 1.0);
-      if( through > (0.5 + (*pulseWidthManual/1.8)) ){
+      if( through > (0.5 + (width/1.5)) ){
         return 1.0;
       } else {
         return -1.0;
       }
     };
+    
     double noiseFunction() {
       return ((double)(rand()%256)-128.0) / 128.0;
     }
@@ -84,7 +85,7 @@ class OrcaTonegen {
         break;
       }
 
-      const double pulse = pulseFunction(through * speed) * *pulseMix;
+      const double pulse = pulseFunction(through * speed, *pulseWidthManual) * *pulseMix;
       const double noise = noiseFunction() * *noiseMix;
       const double saw = sawFunction(through * speed) * *sawMix;
 
