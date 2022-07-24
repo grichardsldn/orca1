@@ -23,7 +23,7 @@ class Filter {
         double frequency = 27.5 * pow(2, *octaveNumber);
         input /= 2.;
         double inputForce = input - pos;
-        double restoringForce = (0 - pos) * *testParam;
+        double restoringForce = (0 - pos) * 0.1; // low cut
 
         double mass = 2000.0 / (frequency * frequency);
         double resistance = vel * -1.0 * 0.01;
