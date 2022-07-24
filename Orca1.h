@@ -27,11 +27,11 @@ enum EParams
   kParamSubMix,
   kParamSubType, // 1 oct down square, 2 oct down square, 2 oct down pulse
   kParamNoiseMix,
-  kParamVCFFreq,
-  kParamVCFResonanse,
-  kParamVCFEnv,
-  kParamVCFMod,
-  kParamVCFKeyboard,
+  kParamFilterFrequency,
+  kParamFilterResonance,
+  kParamFilterEnv,
+  kParamFilterLfo,
+  kParamFilterKey,
   kParamVCFBend,
   kParamVCAType, // env/gate
   kParamAttack,
