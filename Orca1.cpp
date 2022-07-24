@@ -50,7 +50,7 @@ Orca1::Orca1(const InstanceInfo& info)
   
   GetParam(kParamFilterEnv)->InitDouble("FEnv", 0.5, 0., 1.0, 0.01, "");
   
-  GetParam(kParamFilterLfo)->InitDouble("FLFO", 0.1, 0., 1.0, 0.01, "");
+  GetParam(kParamFilterLfo)->InitDouble("FLFO", 0.0, 0., 1.0, 0.01, "");
   
   GetParam(kParamFilterKey)->InitDouble("FKey", 0.5, 0., 1.0, 0.01, "");
   

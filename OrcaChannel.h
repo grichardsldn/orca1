@@ -66,7 +66,9 @@ class OrcaChannel {
         // ;
         filterOctave = config->filterFrequency
             + (((config->filterEnv * (envelope - 0.5)) + 0.5) * 2.0)
-            + (config->filterKey * (((double)note  / 12.0) - 4.0));
+            + (config->filterKey * (((double)note  / 12.0) - 4.0))
+            + (config->filterLfo * (*lfo * 4.0))
+        ;
 
         switch (config->pulseSource ) {
             case 0:// lfo
