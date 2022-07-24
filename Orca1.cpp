@@ -43,7 +43,7 @@ Orca1::Orca1(const InstanceInfo& info)
   GetParam(kParamNoiseMix)->InitDouble("NoiseMix", 1., 0., 1.0, 0.01, "",IParam::kFlagsNone, "Mix", IParam::ShapePowCurve(2.));
   
 //  kParamVCFFreq,
-  GetParam(kParamFilterFrequency)->InitDouble("Freq", 500, 100., 2000., 0.01, "");
+  GetParam(kParamFilterFrequency)->InitDouble("Freq", 4.0, 0., 8., 0.1, "");
   
 //  kParamVCFResonanse,
   GetParam(kParamFilterResonance)->InitDouble("Res", 0.5, 0., 1.0, 0.01, "");

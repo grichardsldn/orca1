@@ -4,7 +4,7 @@ class Filter {
     private:
     // config
     const int* samplerate;
-    const double *frequency;
+    const double *octaveNumber; // 0-8 Middle A  (a4) is in octave 4
     const double *resonance;
     const double *testParam;
 
@@ -13,18 +13,19 @@ class Filter {
     double vel = 0.0;
 
     public:
-    Filter(const int*samplerate, const double *freq, const double *resonance, const double *testParam) {
+    Filter(const int*samplerate, const double *octaveNumber, const double *resonance, const double *testParam) {
         this->samplerate = samplerate;
-        this->frequency = freq;
+        this->octaveNumber = octaveNumber;
         this->resonance = resonance;
         this->testParam = testParam;
     }
     double Tick(double input) {
+        double frequency = 27.5 * pow(2, *octaveNumber);
         input /= 2.;
         double inputForce = input - pos;
         double restoringForce = (0 - pos) * *testParam;
 
-        double mass = 2000.0 / (*frequency * *frequency);
+        double mass = 2000.0 / (frequency * frequency);
         double resistance = vel * -1.0 * 0.01;
 
         double impulse = (inputForce + restoringForce + resistance) / mass / (*samplerate);
