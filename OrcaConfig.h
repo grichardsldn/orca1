@@ -15,6 +15,7 @@ struct OrcaConfig {
     // mixer
     double pulseMix;
     double noiseMix;
+    double sawMix;
     double subMix;
     int subType;
   

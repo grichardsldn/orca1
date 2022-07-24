@@ -198,9 +198,10 @@ void Orca1::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
   config.pulseWidthManual = GetParam(kParamPulseWidthManual)->Value() / 100.0;
   config.pulseSource = GetParam(kParamPulseSource)->Int();
   config.pulseMix = GetParam(kParamPulseMix)->Value();
+  config.sawMix = GetParam(kParamSawMix)->Value();
   config.noiseMix = GetParam(kParamNoiseMix)->Value();
   config.range = GetParam(kParamRange)->Value();
-  
+
   // lfo
   config.lfoRate = GetParam(kParamLfoRate)->Value();
   // env generator
