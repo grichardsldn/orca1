@@ -32,7 +32,7 @@ class OrcaChannel {
     OrcaChannel(const OrcaConfig *config, const double *lfo) {
         this->config = config;
         this->lfo = lfo;
-        tonegen = new OrcaTonegen(&note, &config->samplerate, &config->range, &modify_amount, &pulseWidth, &config->pulseMix, &config->sawMix, &config->noiseMix);
+        tonegen = new OrcaTonegen(&note, &config->samplerate, &config->range, &modify_amount, &pulseWidth, &config->pulseMix, &config->sawMix, &config->subMix, &config->noiseMix);
         filter1 = new Filter( &config->samplerate, &filterOctave, &config->filterResonance, &config->filterLfo);
         filter2 = new Filter( &config->samplerate, &filterOctave, &config->filterResonance, &config->filterLfo);
         adsr = new ADSR(&config->samplerate, &config->attack, &config->decay, &config->sustain, &config->release);

@@ -34,13 +34,13 @@ Orca1::Orca1(const InstanceInfo& info)
   GetParam(kParamPulseMix)->InitDouble("PulseMix", 1., 0., 1.0, 0.01, "",IParam::kFlagsNone, "Mix", IParam::ShapePowCurve(2.));
   
 //  kParamMixerSaw,
-  GetParam(kParamSawMix)->InitDouble("SawMix", 100., 0., 100.0, 0.01, "");
+  GetParam(kParamSawMix)->InitDouble("SawMix", 0., 0., 100.0, 0.01, "");
   
 //  kParamMixerSub,
-  GetParam(kParamSubMix)->InitDouble("SubMix", 100., 0., 100.0, 0.01, "");
+  GetParam(kParamSubMix)->InitDouble("SubMix", 0., 0., 100.0, 0.01, "");
   
 //  kParamMixerNoise,
-  GetParam(kParamNoiseMix)->InitDouble("NoiseMix", 1., 0., 1.0, 0.01, "",IParam::kFlagsNone, "Mix", IParam::ShapePowCurve(2.));
+  GetParam(kParamNoiseMix)->InitDouble("NoiseMix", 0., 0., 1.0, 0.01, "",IParam::kFlagsNone, "Mix", IParam::ShapePowCurve(2.));
   
 //  kParamVCFFreq,
   GetParam(kParamFilterFrequency)->InitDouble("Freq", 4.0, 0., 8., 0.1, "");
@@ -199,6 +199,7 @@ void Orca1::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
   config.pulseSource = GetParam(kParamPulseSource)->Int();
   config.pulseMix = GetParam(kParamPulseMix)->Value();
   config.sawMix = GetParam(kParamSawMix)->Value();
+  config.subMix = GetParam(kParamSubMix)->Value();
   config.noiseMix = GetParam(kParamNoiseMix)->Value();
   config.range = GetParam(kParamRange)->Value();
 

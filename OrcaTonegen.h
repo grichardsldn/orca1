@@ -40,7 +40,7 @@ class OrcaTonegen {
 
     public:
     OrcaTonegen(const int *note, const int*samplerate, const int *range, const double* modifyAmount,
-      const double* pulseWidthManual, const double* pulseMix, const double *sawMix, const double* noiseMix ) {
+      const double* pulseWidthManual, const double* pulseMix, const double *sawMix, const double *subMix, const double* noiseMix ) {
         
       this->range = range;
       this->note = note;
@@ -48,6 +48,7 @@ class OrcaTonegen {
       this->pulseWidthManual = pulseWidthManual;
       this->pulseMix = pulseMix;
       this->sawMix = sawMix;
+      this->subMix = subMix;
       this->noiseMix = noiseMix;
       
       through = 0.0;
@@ -57,6 +58,7 @@ class OrcaTonegen {
     double Tick() {
       double a = 440; //frequency of A (coomon value is 440Hz)
       hz = (a / 32) * pow(2, ((*note - 9) / 12.0));
+      hz /= 4.; // hz is for lowest sub osc
       const double samplerate = (double)(*this->samplerate);
       // const double samplerate = 44000.0;
       const double periodSamples = samplerate / hz;
@@ -72,24 +74,25 @@ class OrcaTonegen {
       double speed = 1.0;
       switch (*range) {
         case 0:
-          speed = 1.0;
-        break;
-        case 1: 
-          speed = 2.0;
-        break;
-        case 2:
           speed = 4.0;
         break;
-        case 3:
+        case 1: 
           speed = 8.0;
+        break;
+        case 2:
+          speed = 16.0;
+        break;
+        case 3:
+          speed = 32.0;
         break;
       }
 
       const double pulse = pulseFunction(through * speed, *pulseWidthManual) * *pulseMix;
       const double noise = noiseFunction() * *noiseMix;
       const double saw = sawFunction(through * speed) * *sawMix;
-
-      return (pulse + noise + saw) / 3.;
+      const double sub = pulseFunction(through * 2.0, 0.0) * *subMix;
+      
+      return (pulse + noise + saw + sub) / 4.;
     };
 
     void Restart() {
