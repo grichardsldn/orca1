@@ -15,12 +15,14 @@ struct OrcaConfig {
     // mixer
     double pulseMix;
     double noiseMix;
+    double sawMix;
     double subMix;
     int subType;
   
     // tone generator
     double pulseWidthManual;
     int pulseSource;
+    int range;
 
     // envelope generator
     double attack; // ms to full rise
