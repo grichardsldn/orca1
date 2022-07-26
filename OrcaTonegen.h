@@ -40,7 +40,7 @@ class OrcaTonegen {
 
     public:
     OrcaTonegen(const int *note, const int*samplerate, const int *range, const double* modifyAmount,
-      const double* pulseWidthManual, const double* pulseMix, const double *sawMix, const double *subMix, const double* noiseMix ) {
+      const double* pulseWidthManual, const double* pulseMix, const double *sawMix, const double *subMix, const int *subType, const double* noiseMix ) {
         
       this->range = range;
       this->note = note;
@@ -49,6 +49,7 @@ class OrcaTonegen {
       this->pulseMix = pulseMix;
       this->sawMix = sawMix;
       this->subMix = subMix;
+      this->subType = subType;
       this->noiseMix = noiseMix;
       
       through = 0.0;

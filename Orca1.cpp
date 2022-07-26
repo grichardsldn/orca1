@@ -200,6 +200,7 @@ void Orca1::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
   config.pulseMix = GetParam(kParamPulseMix)->Value();
   config.sawMix = GetParam(kParamSawMix)->Value();
   config.subMix = GetParam(kParamSubMix)->Value();
+  config.subType = GetParam(kParamSubType)->Value();
   config.noiseMix = GetParam(kParamNoiseMix)->Value();
   config.range = GetParam(kParamRange)->Value();
 
