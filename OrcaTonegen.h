@@ -91,7 +91,20 @@ class OrcaTonegen {
       const double pulse = pulseFunction(through * speed, *pulseWidthManual) * *pulseMix;
       const double noise = noiseFunction() * *noiseMix;
       const double saw = sawFunction(through * speed) * *sawMix;
-      const double sub = pulseFunction(through * 2.0, 0.0) * *subMix;
+
+      double subSpeed = 1.0;
+      double subPulse = 0.0;
+      switch (*subType) {
+        case 0: // 1 oct down square
+          subSpeed = 2.0;
+        break;
+        case 1: // 2 oct down square
+        break;
+        case 2: // 2 oct down pulse
+          subPulse = 0.5;
+        break;
+      }
+      const double sub = pulseFunction(through * subSpeed, subPulse) * *subMix;
       
       return (pulse + noise + saw + sub) / 4.;
     };
