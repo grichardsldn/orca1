@@ -40,7 +40,7 @@ class ADSR {
 
             case attack:
                 diff = 1.0 - output;
-                output += diff * (*attackRate / (double)*samplerate / 100.0);
+                output += diff * (*attackRate / (double)*samplerate / 200.0);
                 if (output > 0.99) {
                     output = 0.99;
                     state = decay;
@@ -48,7 +48,7 @@ class ADSR {
             break;
             case decay:
                 diff = output - *sustainLevel;
-                output -= diff * (*decayRate / (double)*samplerate / 100.0);
+                output -= diff * (*decayRate / (double)*samplerate / 200.0);
                 if (output < (*sustainLevel + 0.01)) {
                     output = *sustainLevel + 0.01;
                     state = sustain;
@@ -64,7 +64,7 @@ class ADSR {
                 if (output > *sustainLevel && *decayRate > *releaseRate) { 
                     dropRate = *decayRate;
                 }
-                output -= diff * (dropRate / *samplerate / 100.0);
+                output -= diff * (dropRate / *samplerate / 200.0);
                 if (output < 0.01) {
                     output = 0.0;
                     state = idle;
@@ -76,7 +76,7 @@ class ADSR {
     };
 
     void Trigger() {
-        const double startLevel = 0.2;
+        const double startLevel = 0.0;
         if (output < startLevel) {
             output = startLevel; // start with something
         }
