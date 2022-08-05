@@ -32,36 +32,40 @@ class ADSR {
     }
 
     double Tick() {
+        double diff;
         switch(state) {
             case idle: 
                 output = 0.0;
             break;
 
             case attack:
-                output += *attackRate / (double)*samplerate / 1000.0;
-                if (output > 1.0) {
-                    output = 1.0;
+                diff = 1.0 - output;
+                output += diff * (*attackRate / (double)*samplerate / 100.0);
+                if (output > 0.99) {
+                    output = 0.99;
                     state = decay;
                 }
             break;
             case decay:
-                output -= *decayRate / (double)*samplerate / 1000.9;
-                if (output < *sustainLevel) {
-                    output = *sustainLevel;
+                diff = output - *sustainLevel;
+                output -= diff * (*decayRate / (double)*samplerate / 100.0);
+                if (output < (*sustainLevel + 0.01)) {
+                    output = *sustainLevel + 0.01;
                     state = sustain;
                 }
             break;
             case sustain:
-                output = *sustainLevel;
+                output = *sustainLevel + 0.01;
             break;
             case release:
-                // above the sustain level, fall at the greater of decay and release
                 double dropRate = *releaseRate;
+                diff = output;
+                
                 if (output > *sustainLevel && *decayRate > *releaseRate) { 
                     dropRate = *decayRate;
                 }
-                output -= dropRate / (double)*samplerate / 1000.9;
-                if (output < 0) {
+                output -= diff * (dropRate / *samplerate / 100.0);
+                if (output < 0.01) {
                     output = 0.0;
                     state = idle;
                 }

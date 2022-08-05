@@ -5,6 +5,7 @@
 #include "Filter.h"
 #include "ADSR.h"
 #include "OrcaTonegen.h"
+#include "math.h"
 
 class OrcaChannel {
     private:
@@ -58,7 +59,7 @@ class OrcaChannel {
 
     double Tick() {
         const double envelope = adsr->Tick();
-
+        const double linearEnvelope = log(envelope);
         filterOctave = config->filterFrequency
             + (((config->filterEnv * (envelope - 0.5)) + 0.5) * 2.0)
             + (config->filterKey * (((double)note  / 12.0) - 4.0))
@@ -81,7 +82,7 @@ class OrcaChannel {
         const double filtered = filter1->Tick(filter2->Tick(raw_tone));
         
         const double attenuation = 1.0 - envelope;
-        const double enveloped = filtered / pow(10.0, attenuation * 2.0);
+        const double enveloped = filtered * envelope;
 
         return enveloped;
     }
