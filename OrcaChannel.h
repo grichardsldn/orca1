@@ -25,7 +25,7 @@ class OrcaChannel {
     ADSR *adsr;
 
     // outputs to subcomponents
-    double modify_amount;
+    double modifyAmount;
     double pulseWidth = 0.0;
     double filterOctave = 0.0;
   
@@ -33,7 +33,7 @@ class OrcaChannel {
     OrcaChannel(const OrcaConfig *config, const double *lfo) {
         this->config = config;
         this->lfo = lfo;
-        tonegen = new OrcaTonegen(&note, &config->samplerate, &config->range, &modify_amount, &pulseWidth, &config->pulseMix, &config->sawMix, &config->subMix, &config->subType, &config->noiseMix);
+        tonegen = new OrcaTonegen(&note, &config->samplerate, &config->range, &modifyAmount, &pulseWidth, &config->pulseMix, &config->sawMix, &config->subMix, &config->subType, &config->noiseMix);
         filter1 = new Filter( &config->samplerate, &filterOctave, &config->filterResonance, &config->filterLfo);
         filter2 = new Filter( &config->samplerate, &filterOctave, &config->filterResonance, &config->filterLfo);
         adsr = new ADSR(&config->samplerate, &config->attack, &config->decay, &config->sustain, &config->release);
@@ -58,6 +58,8 @@ class OrcaChannel {
     };
 
     double Tick() {
+        modifyAmount = config->tune;
+        
         const double envelope = adsr->Tick();
         const double linearEnvelope = log(envelope);
         filterOctave = config->filterFrequency

@@ -44,6 +44,7 @@ class OrcaTonegen {
         
       this->range = range;
       this->note = note;
+      this->modifyAmount = modifyAmount;
       this->samplerate = samplerate;
       this->pulseWidthManual = pulseWidthManual;
       this->pulseMix = pulseMix;
@@ -58,7 +59,7 @@ class OrcaTonegen {
 
     double Tick() {
       double a = 440; //frequency of A (coomon value is 440Hz)
-      hz = (a / 32) * pow(2, ((*note - 9) / 12.0));
+      hz = (a / 32) * pow(2, (((*note + *modifyAmount) - 9.0) / 12.0));
       hz /= 4.; // hz is for lowest sub osc
       const double samplerate = (double)(*this->samplerate);
       // const double samplerate = 44000.0;
