@@ -16,7 +16,7 @@ enum EParams
   kParamLfoRate,
   kParamLfoWaveform, // tri, square, random, noise
   kParamLfoBend, // what is this?
-  kParamVCOMod,
+  kParamPitchMod,
   kParamRange, // 16,8,4,2
   kParamVCOBend,
   kParamPoly, // mono/poly

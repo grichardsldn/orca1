@@ -21,8 +21,7 @@ Orca1::Orca1(const InstanceInfo& info)
 //  kParamLFOBend, // what is this?
   GetParam(kParamLfoBend)->InitDouble("LFOBend", 100., 0., 100.0, 0.01, "");
   
-//  kParamVCOMod,
-  GetParam(kParamVCOMod)->InitDouble("Osc mod", 100., 0., 100.0, 0.01, "");
+  GetParam(kParamPitchMod)->InitDouble("Pitch mod", 0., 0., 12.0, 0.01, "");
   
 //  kParamVCOBend,
   GetParam(kParamVCOBend)->InitDouble("Osc bend", 0., 0., 100.0, 0.01, "");
@@ -64,7 +63,7 @@ Orca1::Orca1(const InstanceInfo& info)
   GetParam(kParamSustain)->InitDouble("Sustain", 0.2, 0., 1.0, 0.01, "",IParam::kFlagsNone, "ADSR", IParam::ShapePowCurve(3.));
   GetParam(kParamRelease)->InitDouble("Release", 300., 50.0, 20000.0, 0.01, "",IParam::kFlagsNone, "ADSR", IParam::ShapePowCurve(4.));
   
-  GetParam(kParamTune)->InitDouble("Tune", 0., -100., 100.0, 0.05, "");
+  GetParam(kParamTune)->InitDouble("Tune", 0., -1., 1., 0.05, "");
   GetParam(kParamVolume)->InitDouble("Volume", 1.0,0.0,1.0,0.1,"");
 
   // GetParam(kParamNoteGlideTime)->InitMilliseconds("Note Glide Time", 0., 0.0, 30.);
@@ -115,7 +114,7 @@ Orca1::Orca1(const InstanceInfo& info)
                                                DEFAULT_STYLE.WithShowValue(false)));
     pGraphics->AttachControl(new IVRadioButtonControl(oscControls.GetGridCell(6,2,5).GetCentredInside(size), kParamPortamentoType, {}, "", DEFAULT_STYLE.WithShowLabel(true)));
    
-    pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(7,2,5).GetCentredInside(size), kParamVCOMod, "Mod",
+    pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(7,2,5).GetCentredInside(size), kParamPitchMod, "Mod",
                                                DEFAULT_STYLE.WithShowValue(false)));
 
     pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(8,2,5).GetCentredInside(size), kParamPoly, "Mode"), kNoTag, "Mode")->DisablePrompt(false);
@@ -203,6 +202,8 @@ void Orca1::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
   config.subType = GetParam(kParamSubType)->Value();
   config.noiseMix = GetParam(kParamNoiseMix)->Value();
   config.range = GetParam(kParamRange)->Value();
+  config.tune = GetParam(kParamTune)->Value();
+  config.pitchMod = GetParam(kParamPitchMod)->Value();
 
   // lfo
   config.lfoRate = GetParam(kParamLfoRate)->Value();
