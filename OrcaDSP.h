@@ -13,6 +13,7 @@ class OrcaDSP {
     //components
     OrcaChannel* channels[8];
     LFO* lfo;
+    double modWheel = 0.0;
 
     // state
     double lfoValue;
@@ -24,10 +25,12 @@ class OrcaDSP {
         this->config = config;
         lfo = new LFO(&config->lfoRate, &config->samplerate, &config->lfoWaveform);
         for (int i = 0; i< 8; i++) {
-            channels[i] = new OrcaChannel(config, &lfoValue);
+            channels[i] = new OrcaChannel(config, &lfoValue, &modWheel);
         }
     }
-
+    void ModWheel(double value) {
+        modWheel = value;
+    }
     void NoteOn(int note, int velocity) {
         if (config->poly == 1) {
             channels[0]->Trigger(note, (double)velocity);

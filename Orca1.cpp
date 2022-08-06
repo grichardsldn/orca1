@@ -272,6 +272,11 @@ handle:
   if (status == IMidiMsg::kNoteOff) {
     dsp->NoteOff(msg.NoteNumber());
   }
+  if (status == IMidiMsg::kControlChange) {
+    if (msg.ControlChangeIdx() == IMidiMsg::kModWheel) {
+      dsp->ModWheel(msg.ControlChange(IMidiMsg::kModWheel));
+    }
+  }
   // mDSP.ProcessMidiMsg(msg);
   SendMidiMsg(msg);
 }
