@@ -27,7 +27,7 @@ Orca1::Orca1(const InstanceInfo& info)
   GetParam(kParamVCOBend)->InitDouble("Osc bend", 0., 0., 100.0, 0.01, "");
   
 //  kParamPulseWidth,
-  GetParam(kParamPulseWidthManual)->InitDouble("PulseWidthManual", 100., 0., 100.0, 0.01, "%");
+  GetParam(kParamPulseWidthManual)->InitDouble("PulseWidthManual", .5, 0., 1.0, 0.01, "%");
   
 //  kParamMixerPulse,
   GetParam(kParamPulseMix)->InitDouble("PulseMix", 1., 0., 1.0, 0.01, "",IParam::kFlagsNone, "Mix", IParam::ShapePowCurve(2.));
@@ -194,7 +194,7 @@ void Orca1::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
   //const double gain = GetParam(kGain)->Value() / 100.;
 
   // tone generator
-  config.pulseWidthManual = GetParam(kParamPulseWidthManual)->Value() / 100.0;
+  config.pulseWidthManual = GetParam(kParamPulseWidthManual)->Value();
   config.pulseSource = GetParam(kParamPulseSource)->Int();
   config.pulseMix = GetParam(kParamPulseMix)->Value();
   config.sawMix = GetParam(kParamSawMix)->Value();
