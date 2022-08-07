@@ -33,17 +33,17 @@ class OrcaDSP {
     }
     void NoteOn(int note, int velocity) {
         if (config->poly == 1) {
-            channels[0]->Trigger(note, (double)velocity);
+            channels[0]->Trigger(note, (double)velocity / 127.0);
         } else {
             currentNote = note;
             OrcaChannel *existingChannel = findNote(note);
             if (existingChannel != NULL) {
-                existingChannel->Trigger(note, (double)velocity);
+                existingChannel->Trigger(note, (double)velocity/127.0);
                 return;
             }
             OrcaChannel *channel = idleChannel();
             if (channel != NULL) {
-                channel->Trigger(note, (double)velocity);
+                channel->Trigger(note, (double)velocity / 127.0);
                 return;
             } 
         }
