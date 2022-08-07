@@ -94,14 +94,6 @@ class OrcaDSP {
         }
         return NULL;  
     }
-    OrcaChannel* idleChannel() {
-      for (int i = 0 ; i<NUM_CHANNELS;i++) {
-            if (channels[i]->getState() == idle) {
-                return channels[i];
-            }
-        }
-        return NULL;
-    }
     OrcaChannel* findNote(int note) {
       for (int i = 0 ; i<NUM_CHANNELS;i++) {
             if (channels[i]->getNote() == note) {
