@@ -33,10 +33,10 @@ Orca1::Orca1(const InstanceInfo& info)
   GetParam(kParamPulseMix)->InitDouble("PulseMix", 1., 0., 1.0, 0.01, "",IParam::kFlagsNone, "Mix", IParam::ShapePowCurve(2.));
   
 //  kParamMixerSaw,
-  GetParam(kParamSawMix)->InitDouble("SawMix", 0., 0., 100.0, 0.01, "", IParam::kFlagsNone, "Mix", IParam::ShapePowCurve(2.));
+  GetParam(kParamSawMix)->InitDouble("SawMix", 0., 0., 1.0, 0.01, "", IParam::kFlagsNone, "Mix", IParam::ShapePowCurve(2.));
   
 //  kParamMixerSub,
-  GetParam(kParamSubMix)->InitDouble("SubMix", 0., 0., 100.0, 0.01, "", IParam::kFlagsNone, "Mix", IParam::ShapePowCurve(2.));
+  GetParam(kParamSubMix)->InitDouble("SubMix", 0., 0., 1.0, 0.01, "", IParam::kFlagsNone, "Mix", IParam::ShapePowCurve(2.));
   
 //  kParamMixerNoise,
   GetParam(kParamNoiseMix)->InitDouble("NoiseMix", 0., 0., 1.0, 0.01, "",IParam::kFlagsNone, "Mix", IParam::ShapePowCurve(2.));
