@@ -41,11 +41,23 @@ class OrcaDSP {
                 existingChannel->Trigger(note, (double)velocity/127.0);
                 return;
             }
-            OrcaChannel *channel = idleChannel();
+            OrcaChannel *channel = findChannel(idle);
+            if (channel == NULL) {
+                channel = findChannel(release);
+            }
+            if (channel == NULL) {
+                channel = findChannel(sustain);
+            }
+            if (channel == NULL) {
+                channel = findChannel(decay);
+            }
+            if (channel == NULL) {
+                channel = findChannel(attack);
+            }
             if (channel != NULL) {
                 channel->Trigger(note, (double)velocity / 127.0);
-                return;
-            } 
+            }
+            return;
         }
     };
 
@@ -74,13 +86,13 @@ class OrcaDSP {
     };
 
     private:
-    OrcaChannel* idleChannel() {
+    OrcaChannel* findChannel(State state) {
       for (int i = 0 ; i<NUM_CHANNELS;i++) {
-            if (channels[i]->getState() == idle) {
+            if (channels[i]->getState() == state) {
                 return channels[i];
             }
         }
-        return NULL;
+        return NULL;  
     }
     OrcaChannel* findNote(int note) {
       for (int i = 0 ; i<NUM_CHANNELS;i++) {
