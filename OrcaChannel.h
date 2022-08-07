@@ -16,7 +16,7 @@ class OrcaChannel {
 
     // state
     int note;
-    double velocity;
+    double velocity = 0.0;
 
     // components
     OrcaTonegen* tonegen;
@@ -51,6 +51,7 @@ class OrcaChannel {
 
     void Trigger( int note, double velocity ) {
         this->note = note;
+        this->velocity = (double)velocity;
         this->velocity = velocity;
         this->tonegen->Restart();
         this->adsr->Trigger();
@@ -86,7 +87,7 @@ class OrcaChannel {
         const double filtered = filter1->Tick(filter2->Tick(raw_tone));
         
         const double attenuation = 1.0 - envelope;
-        const double enveloped = filtered * envelope;
+        const double enveloped = filtered * envelope * velocity;
 
         return enveloped;
     }
