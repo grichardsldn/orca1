@@ -1,2 +1,9 @@
 # Orca1
-A basic MPE capable synthesier plug-in with IGraphics GUI
+Polyphonic subtractive soft-synth built on the IPlug2 framework.
+
+## TODO
+
+* pitch bend
+* glid
+* use of midi message timestamps for sub-frame level timing
+* put some text on the ui
