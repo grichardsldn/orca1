@@ -1,5 +1,5 @@
 # Orca1
-Polyphonic subtractive soft-synth built on the IPlug2 framework.
+Polyphonic subtractive soft-synth built on the wonderful IPlug2 framework.
 
 ## TODO
 
