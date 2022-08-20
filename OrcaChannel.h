@@ -24,12 +24,15 @@ class OrcaChannel {
     Filter* filter2;
 
     ADSR *adsr;
+    ADSR *gate;
 
     // outputs to subcomponents
     double modifyAmount;
     double pulseWidth = 0.0;
     double filterOctave = 0.0;
-  
+    double gateFull = 50000.0;
+    double one = 1.0;
+
     public:
     OrcaChannel(const OrcaConfig *config, const double *lfo, const double *modWheel) {
         this->config = config;
@@ -39,6 +42,8 @@ class OrcaChannel {
         filter1 = new Filter( &config->samplerate, &filterOctave, &config->filterResonance, &config->filterLfo);
         filter2 = new Filter( &config->samplerate, &filterOctave, &config->filterResonance, &config->filterLfo);
         adsr = new ADSR(&config->samplerate, &config->attack, &config->decay, &config->sustain, &config->release);
+        gate = new ADSR(&config->samplerate, &gateFull, &gateFull, &one, &gateFull);
+
     };
 
     int getNote() {
@@ -55,16 +60,19 @@ class OrcaChannel {
         this->velocity = velocity;
         this->tonegen->Restart();
         this->adsr->Trigger();
+        this->gate->Trigger();
     };
     void Release() {
         this->adsr->Release();
+        this->gate->Release();
     };
 
     double Tick() {
         modifyAmount = config->tune + (config->pitchMod * *modWheel * *lfo);
 
         const double envelope = adsr->Tick();
-        const double linearEnvelope = log(envelope);
+        const double gateValue = gate->Tick();
+
         filterOctave = config->filterFrequency
             + (((config->filterEnv * (envelope - 0.5)) + 0.5) * 2.0)
             + (config->filterKey * (((double)note  / 12.0) - 4.0))
@@ -86,9 +94,10 @@ class OrcaChannel {
         const double raw_tone = tonegen->Tick();
         const double filtered = filter1->Tick(filter2->Tick(raw_tone));
         
-        const double attenuation = 1.0 - envelope;
-        const double enveloped = filtered * envelope * velocity;
+        const double amped = config->ampType == 0 ? 
+            (filtered * envelope * velocity)
+             : (filtered * gateValue * velocity);
 
-        return enveloped;
+        return amped;
     }
 };

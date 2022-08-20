@@ -18,6 +18,9 @@ struct OrcaConfig {
     double sawMix;
     double subMix;
     int subType;
+
+    // amp
+    int ampType; // env/gate
   
     // tone generator
     double pulseWidthManual;

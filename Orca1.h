@@ -33,7 +33,7 @@ enum EParams
   kParamFilterLfo,
   kParamFilterKey,
   kParamVCFBend,
-  kParamVCAType, // env/gate
+  kParamAmpType, // env/gate
   kParamAttack,
   kParamDecay,
   kParamSustain,
