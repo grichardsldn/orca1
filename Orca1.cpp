@@ -227,15 +227,15 @@ void Orca1::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
   const int nChans = NOutChansConnected();
   const int realSamplerate = GetSampleRate();
   
-  const int particles[] = {1,4,2,8,3,5,3,1,4,6,4,7,3,1,5,7};
-  //const int particles[] = {4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4};
+  const int bentParticles[] = {1,4,2,8,3,5,3,1,4,6,4,7,3,1,5,7};
+  const int straightParticles[] = {4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4};
 
   if (1) {
     sample hiRes[16 * 4];
     for (int s = 0; s < nFrames; s+= 16) {
       int hiResIndex = 0;
       for (int t = 0; t<16; t++) {
-        const int particleLength = particles[t];
+        const int particleLength = config.volume < 0.5 ? straightParticles[t] : bentParticles[t];
         config.samplerate =  realSamplerate / particleLength * 4;
         const sample tickOutput = dsp->Tick();
         for (int st=0;st<particleLength;st++) {
