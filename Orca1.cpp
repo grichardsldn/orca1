@@ -6,7 +6,7 @@ Orca1::Orca1(const InstanceInfo& info)
 : Plugin(info, MakeConfig(kNumParams, kNumPresets))
 {
   GetParam(kParamPortamentoType)->InitEnum("P-Mode", 0, {"Auto", "Off", "On"} );
-  GetParam(kParamLfoWaveform)->InitEnum("LFOWaveform", 0, {"Triangle", "Square", "Random", "Noise"} );
+  GetParam(kParamLfoWaveform)->InitEnum("LFOWaveform", 0, {"Triangle", "Square", "Step", "Warble"} );
   GetParam(kParamRange)->InitEnum("Range", 0, {"16", "8", "4", "2"} );
   GetParam(kParamPulseSource)->InitEnum("Source", 0, {"LFO", "Manual", "Env"} );
   GetParam(kParamSubType)->InitEnum("Sub", 0, {"1 Oct sq", "2 Oct sq", "2 oct pulse"} );
@@ -124,8 +124,8 @@ Orca1::Orca1(const InstanceInfo& info)
     pGraphics->AttachControl(new IVKnobControl(modControls.GetGridCell(0,2,5).GetCentredInside(size), kParamLfoRate, "Rate",
                                                DEFAULT_STYLE.WithShowValue(false)));
     
-    pGraphics->AttachControl(new IVRadioButtonControl(modControls.GetGridCell(1,2,5).GetCentredInside(size), kParamLfoWaveform, {}, "", DEFAULT_STYLE.WithShowLabel(false)));
-    
+    pGraphics->AttachControl(new IVRadioButtonControl(modControls.GetGridCell(1,2,5,EDirection::Horizontal,2).GetCentredInside(size * 2, size), kParamLfoWaveform, {}, "", DEFAULT_STYLE.WithShowLabel(false)));
+
     pGraphics->AttachControl(new IVKnobControl(modControls.GetGridCell(5,2,5).GetCentredInside(size), kParamLfoBend, "Bend",
                                                DEFAULT_STYLE.WithShowValue(false)));
 
@@ -207,6 +207,8 @@ void Orca1::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
 
   // lfo
   config.lfoRate = GetParam(kParamLfoRate)->Value();
+  config.lfoWaveform = GetParam(kParamLfoWaveform)->Value();
+
   // env generator
   config.attack = GetParam(kParamAttack)->Value();
   config.decay = GetParam(kParamDecay)->Value();

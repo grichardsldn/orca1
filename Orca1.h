@@ -14,7 +14,7 @@ enum EParams
   kParamPortamento,
   kParamPortamentoType, // auto, off, on
   kParamLfoRate,
-  kParamLfoWaveform, // tri, square, random, noise
+  kParamLfoWaveform, // tri, square, step random, warble
   kParamLfoBend, // what is this?
   kParamPitchMod,
   kParamRange, // 16,8,4,2
