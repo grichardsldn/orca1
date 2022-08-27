@@ -42,7 +42,7 @@ class OrcaChannel {
         filter1 = new Filter( &config->samplerate, &filterOctave, &config->filterResonance, &config->filterLfo);
         filter2 = new Filter( &config->samplerate, &filterOctave, &config->filterResonance, &config->filterLfo);
         adsr = new ADSR(&config->samplerate, &config->attack, &config->decay, &config->sustain, &config->release);
-        gate = new ADSR(&config->samplerate, &gateFull, &gateFull, &one, &gateFull);
+        gate = new ADSR(&config->samplerate, &gateFull, &gateFull, &one, &config->release);
 
     };
 
