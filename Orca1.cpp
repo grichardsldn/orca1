@@ -13,7 +13,7 @@ Orca1::Orca1(const InstanceInfo& info)
   GetParam(kParamAmpType)->InitEnum("Amp", 0, {"Env", "Gate+Rel"} );
   GetParam(kParamPoly)->InitEnum("Mode", 0, {"Poly", "Mono"} );
 //  kParamPortamento,
-  GetParam(kParamPortamento)->InitDouble("Glide", 0., 0., 1.0, 0.01, "");
+  GetParam(kParamPortamento)->InitDouble("Glide", 0.01, 0.01, 0.5, 0.005, "");
   
 //  kParamLFORate,
   GetParam(kParamLfoRate)->InitDouble("LfoRate", 0.3, 0.05, 10.0, 0.01, "");
