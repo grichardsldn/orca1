@@ -22,6 +22,7 @@ class OrcaChannel {
     OrcaTonegen* tonegen;
     Filter* filter1;
     Filter* filter2;
+    Filter* filter3;
 
     ADSR *adsr;
     ADSR *gate;
@@ -38,9 +39,12 @@ class OrcaChannel {
         this->config = config;
         this->lfo = lfo;
         this->modWheel = modWheel;
+        double noResonance = 0.0;
         tonegen = new OrcaTonegen(&note, &config->samplerate, &config->range, &modifyAmount, &pulseWidth, &config->pulseMix, &config->sawMix, &config->subMix, &config->subType, &config->noiseMix);
         filter1 = new Filter( &config->samplerate, &filterOctave, &config->filterResonance, &config->filterLfo);
         filter2 = new Filter( &config->samplerate, &filterOctave, &config->filterResonance, &config->filterLfo);
+        filter3 = new Filter( &config->samplerate, &filterOctave, &noResonance, &config->filterLfo);
+
         adsr = new ADSR(&config->samplerate, &config->attack, &config->decay, &config->sustain, &config->release);
         gate = new ADSR(&config->samplerate, &gateFull, &gateFull, &one, &config->release);
 
@@ -92,7 +96,7 @@ class OrcaChannel {
         }
     
         const double raw_tone = tonegen->Tick();
-        const double filtered = filter1->Tick(filter2->Tick(raw_tone));
+        const double filtered = filter1->Tick(filter2->Tick(filter2->Tick(raw_tone)));
         
         const double amped = config->ampType == 0 ? 
             (filtered * envelope * velocity)
