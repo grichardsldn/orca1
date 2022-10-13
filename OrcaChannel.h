@@ -12,6 +12,7 @@ class OrcaChannel {
     // inputs
     const double *lfo;
     const double *modWheel;
+    const double *bendWheel;
     const OrcaConfig *config;
 
     // state
@@ -35,11 +36,12 @@ class OrcaChannel {
     double one = 1.0;
 
     public:
-    OrcaChannel(const OrcaConfig *config, const double *lfo, const double *modWheel) {
+    OrcaChannel(const OrcaConfig *config, const double *lfo, const double *modWheel, const double *bendWheel) {
         this->config = config;
         this->lfo = lfo;
         this->modWheel = modWheel;
-          
+        this->bendWheel = bendWheel;
+
         tonegen = new OrcaTonegen(&note, &config->samplerate, &config->range, &modifyAmount, &pulseWidth, &config->pulseMix, &config->sawMix, &config->subMix, &config->subType, &config->noiseMix);
         filter1 = new Filter( &config->samplerate, &filterOctave, &config->filterResonance, &config->filterLfo);
         filter2 = new Filter( &config->samplerate, &filterOctave, &config->filterResonance, &config->filterLfo);
@@ -74,7 +76,9 @@ class OrcaChannel {
         double noteDiff = noteNumber - note;
         note += noteDiff / (config->samplerate * config->portamento);
 
-        modifyAmount = config->tune + (config->pitchMod * *modWheel * *lfo);
+        modifyAmount = config->tune 
+            + (config->pitchMod * *modWheel * *lfo)
+            + (config->pitchBend * *bendWheel);
 
         const double envelope = adsr->Tick();
         const double gateValue = gate->Tick();

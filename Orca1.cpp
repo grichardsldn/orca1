@@ -23,7 +23,7 @@ Orca1::Orca1(const InstanceInfo& info)
   
   GetParam(kParamPitchMod)->InitDouble("Pitch mod", 0., 0., 12.0, 0.01, "");
   
-  GetParam(kParamPitchBend)->InitDouble("Pitch bend", 2., 0.0, 12.0, 0.01, "");
+  GetParam(kParamPitchBend)->InitDouble("Pitch bend", 2.0, 0.0, 12.0, 0.01, "");
   
 //  kParamPulseWidth,
   GetParam(kParamPulseWidthManual)->InitDouble("PulseWidthManual", .5, 0., 1.0, 0.01, "%");
@@ -282,6 +282,9 @@ handle:
     if (msg.ControlChangeIdx() == IMidiMsg::kModWheel) {
       dsp->ModWheel(msg.ControlChange(IMidiMsg::kModWheel));
     }
+  }
+  if (status == IMidiMsg::kPitchWheel) {
+    dsp->BendWheel(msg.PitchWheel());
   }
   // mDSP.ProcessMidiMsg(msg);
   SendMidiMsg(msg);
