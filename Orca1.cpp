@@ -23,8 +23,7 @@ Orca1::Orca1(const InstanceInfo& info)
   
   GetParam(kParamPitchMod)->InitDouble("Pitch mod", 0., 0., 12.0, 0.01, "");
   
-//  kParamVCOBend,
-  GetParam(kParamVCOBend)->InitDouble("Osc bend", 0., 0., 100.0, 0.01, "");
+  GetParam(kParamPitchBend)->InitDouble("Pitch bend", 2.0, 0.0, 12.0, 0.01, "");
   
 //  kParamPulseWidth,
   GetParam(kParamPulseWidthManual)->InitDouble("PulseWidthManual", .5, 0., 1.0, 0.01, "%");
@@ -53,8 +52,7 @@ Orca1::Orca1(const InstanceInfo& info)
   
   GetParam(kParamFilterKey)->InitDouble("FKey", 0.5, 0., 1.0, 0.01, "");
   
-//  kParamVCFBend,
-  GetParam(kParamVCFBend)->InitDouble("FBend", 100., 0., 100.0, 0.01, "");
+  GetParam(kParamFilterBend)->InitDouble("Filter Bend", 0., 0., 24.0, 0.01, "");
   
   // env generator
   GetParam(kParamAttack)->InitDouble("Attack", 50000., 200.0, 50000.0, 0.01, "",IParam::kFlagsNone, "ADSR", IParam::ShapePowCurve(4.));
@@ -110,7 +108,7 @@ Orca1::Orca1(const InstanceInfo& info)
     pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(2,2,5).GetCentredInside(size), kParamPulseWidthManual, "Width",
                                                DEFAULT_STYLE.WithShowValue(false)));
     pGraphics->AttachControl(new IVRadioButtonControl(oscControls.GetGridCell(3,2,5).GetCentredInside(size), kParamPulseSource, {}, "", DEFAULT_STYLE.WithShowLabel(true)));
-    pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(5,2,5).GetCentredInside(size), kParamVCOBend, "Bend",
+    pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(5,2,5).GetCentredInside(size), kParamPitchBend, "Bend",
                                                DEFAULT_STYLE.WithShowValue(false)));
     pGraphics->AttachControl(new IVRadioButtonControl(oscControls.GetGridCell(6,2,5).GetCentredInside(size), kParamPortamentoType, {}, "", DEFAULT_STYLE.WithShowLabel(true)));
    
@@ -162,7 +160,7 @@ Orca1::Orca1(const InstanceInfo& info)
                                                DEFAULT_STYLE.WithShowValue(false)));
     pGraphics->AttachControl(new IVKnobControl(filterControls.GetGridCell(7,2,5).GetCentredInside(size), kParamFilterKey, "Kbd",
                                                DEFAULT_STYLE.WithShowValue(false)));
-    pGraphics->AttachControl(new IVKnobControl(filterControls.GetGridCell(8,2,5).GetCentredInside(size), kParamVCFBend, "Bend",
+    pGraphics->AttachControl(new IVKnobControl(filterControls.GetGridCell(8,2,5).GetCentredInside(size), kParamFilterBend, "Bend",
                                                DEFAULT_STYLE.WithShowValue(false)));
     // pGraphics->AttachControl(new IVKnobControl(b.GetCentredInside(70).GetVShifted(-75), kParamGain, "Gain",  DEFAULT_STYLE.WithShowValue(false)));
     
@@ -204,6 +202,7 @@ void Orca1::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
   config.range = GetParam(kParamRange)->Value();
   config.tune = GetParam(kParamTune)->Value();
   config.pitchMod = GetParam(kParamPitchMod)->Value();
+  config.pitchBend = GetParam(kParamPitchBend)->Value();
 
   // lfo
   config.lfoRate = GetParam(kParamLfoRate)->Value();
@@ -220,6 +219,7 @@ void Orca1::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
   config.filterEnv = GetParam(kParamFilterEnv)->Value();
   config.filterKey = GetParam(kParamFilterKey)->Value();
   config.filterLfo = GetParam(kParamFilterLfo)->Value();
+  config.filterBend = GetParam(kParamFilterBend)->Value();
 
   // global
   config.volume = GetParam(kParamVolume)->Value();
@@ -282,6 +282,9 @@ handle:
     if (msg.ControlChangeIdx() == IMidiMsg::kModWheel) {
       dsp->ModWheel(msg.ControlChange(IMidiMsg::kModWheel));
     }
+  }
+  if (status == IMidiMsg::kPitchWheel) {
+    dsp->BendWheel(msg.PitchWheel());
   }
   // mDSP.ProcessMidiMsg(msg);
   SendMidiMsg(msg);

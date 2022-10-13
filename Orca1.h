@@ -18,7 +18,7 @@ enum EParams
   kParamLfoBend, // what is this?
   kParamPitchMod,
   kParamRange, // 16,8,4,2
-  kParamVCOBend,
+  kParamPitchBend,
   kParamPoly, // mono/poly
   kParamPulseWidthManual,
   kParamPulseSource, // lfo, manual, env
@@ -32,7 +32,7 @@ enum EParams
   kParamFilterEnv,
   kParamFilterLfo,
   kParamFilterKey,
-  kParamVCFBend,
+  kParamFilterBend,
   kParamAmpType, // env/gate
   kParamAttack,
   kParamDecay,
