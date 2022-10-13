@@ -15,7 +15,8 @@ class OrcaChannel {
     const OrcaConfig *config;
 
     // state
-    int note;
+    int noteNumber;
+    double note;
     double velocity = 0.0;
 
     // components
@@ -38,6 +39,7 @@ class OrcaChannel {
         this->config = config;
         this->lfo = lfo;
         this->modWheel = modWheel;
+          
         tonegen = new OrcaTonegen(&note, &config->samplerate, &config->range, &modifyAmount, &pulseWidth, &config->pulseMix, &config->sawMix, &config->subMix, &config->subType, &config->noiseMix);
         filter1 = new Filter( &config->samplerate, &filterOctave, &config->filterResonance, &config->filterLfo);
         filter2 = new Filter( &config->samplerate, &filterOctave, &config->filterResonance, &config->filterLfo);
@@ -47,15 +49,16 @@ class OrcaChannel {
     };
 
     int getNote() {
-        return note;
+        return noteNumber;
     }
 
     State getState() {
         return adsr->getState();
     }
 
-    void Trigger( int note, double velocity ) {
-        this->note = note;
+    void Trigger( int note, double velocity, int startingNote ) {
+        this->noteNumber = note;
+        this->note = startingNote;
         this->velocity = (double)velocity;
         this->velocity = velocity;
         this->tonegen->Restart();
@@ -68,6 +71,9 @@ class OrcaChannel {
     };
 
     double Tick() {
+        double noteDiff = noteNumber - note;
+        note += noteDiff / (config->samplerate * config->portamento);
+
         modifyAmount = config->tune + (config->pitchMod * *modWheel * *lfo);
 
         const double envelope = adsr->Tick();

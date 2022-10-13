@@ -4,7 +4,7 @@
 class OrcaTonegen {
     private:
     // params
-    const int* note;
+    const double* note;
     const int* samplerate;
     const int* range;
     const double* modifyAmount;
@@ -39,7 +39,7 @@ class OrcaTonegen {
     }
 
     public:
-    OrcaTonegen(const int *note, const int*samplerate, const int *range, const double* modifyAmount,
+    OrcaTonegen(const double *note, const int*samplerate, const int *range, const double* modifyAmount,
       const double* pulseWidthManual, const double* pulseMix, const double *sawMix, const double *subMix, const int *subType, const double* noiseMix ) {
         
       this->range = range;

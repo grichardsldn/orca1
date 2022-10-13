@@ -17,7 +17,7 @@ class OrcaDSP {
 
     // state
     double lfoValue;
-    double currentNote = 0;
+    double currentNote = -1;
 
     public:
     // methods
@@ -32,13 +32,26 @@ class OrcaDSP {
         modWheel = value;
     }
     void NoteOn(int note, int velocity) {
-        if (config->poly == 1) {
-            channels[0]->Trigger(note, (double)velocity / 127.0);
-        } else {
+        if (currentNote == -1) {
             currentNote = note;
+        }
+        if (config->portamentoType == 1) { // off
+            currentNote = note;
+        }
+        if (config->portamentoType == 0) { // auto
+            if (!anyChannelGateOn()) {
+                currentNote = note;
+            }
+        }
+        if (config->poly == 1) {
+            
+            channels[0]->Trigger(note, (double)velocity / 127.0, currentNote);
+            currentNote = note;
+        } else {
             OrcaChannel *existingChannel = findNote(note);
             if (existingChannel != NULL) {
-                existingChannel->Trigger(note, (double)velocity/127.0);
+                existingChannel->Trigger(note, (double)velocity/127.0, currentNote);
+                currentNote = note;
                 return;
             }
             OrcaChannel *channel = findChannel(idle);
@@ -55,7 +68,8 @@ class OrcaDSP {
                 channel = findChannel(attack);
             }
             if (channel != NULL) {
-                channel->Trigger(note, (double)velocity / 127.0);
+                channel->Trigger(note, (double)velocity / 127.0, currentNote);
+                currentNote = note;
             }
             return;
         }
@@ -101,5 +115,15 @@ class OrcaDSP {
             }
         }
         return NULL;
+    }
+    bool anyChannelGateOn() {
+        for (int i = 0 ; i<NUM_CHANNELS;i++) {
+            int state = channels[i]->getState();
+
+            if (state != idle && state != release) {
+                return true;
+            }
+        }
+        return false;
     }
 };
