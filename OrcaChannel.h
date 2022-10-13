@@ -87,6 +87,7 @@ class OrcaChannel {
             + (((config->filterEnv * (envelope - 0.5)) + 0.5) * 2.0)
             + (config->filterKey * (((double)note  / 12.0) - 4.0))
             + (config->filterLfo * (*lfo * 4.0))
+            + (config->filterBend * *bendWheel / 12.0)
         ;
 
         switch (config->pulseSource ) {
