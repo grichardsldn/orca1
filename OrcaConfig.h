@@ -30,6 +30,7 @@ struct OrcaConfig {
     int range;
     double pitchMod;
     double tune;
+    double pitchBend;
 
     // envelope generator
     double attack; // ms to full rise
@@ -43,4 +44,5 @@ struct OrcaConfig {
     double filterEnv;
     double filterKey;
     double filterLfo;
+    double filterBend;
 };
