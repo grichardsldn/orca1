@@ -98,8 +98,15 @@ class OrcaDSP {
     }
 
     iplug::sample Tick() {
-        for (int i = 0 ; i  < 4; i++) {
-            lfoValue[i] = lfo[i]->Tick();
+        if (config->lfoLinked == 0) { // LINKED 
+            double lfo1 = lfo[0]->Tick();
+            for (int i = 0 ; i  < 4; i++) {
+                lfoValue[i] = lfo1;
+             }
+        } else {
+            for (int i = 0 ; i  < 4; i++) {
+                lfoValue[i] = lfo[i]->Tick();
+            }
         }
 
         iplug::sample output = 0.0;
