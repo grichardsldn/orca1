@@ -100,7 +100,7 @@ class OrcaDSP {
         for (int i=0;i<numChannels;i++) {
             output += channels[i]->Tick();
         }
-        return output * config->volume;
+        return output;
     };
 
     private:
