@@ -12,21 +12,25 @@ class OrcaDSP {
     private:
     //components
     OrcaChannel* channels[8];
-    LFO* lfo;
+    LFO* lfo[4];
     double modWheel = 0.0;
     double bendWheel = 0.0;
 
     // state
-    double lfoValue;
+    double lfoValue[4];
     double currentNote = -1;
 
     public:
     // methods
     OrcaDSP(const OrcaConfig* config) {
         this->config = config;
-        lfo = new LFO(&config->lfoRate, &config->samplerate, &config->lfoWaveform);
+
+        for (int i = 0; i < 4; i++) {
+             lfo[i] = new LFO(i / 4.0, &config->lfoRate, &config->samplerate, &config->lfoWaveform);
+        }
+
         for (int i = 0; i< 8; i++) {
-            channels[i] = new OrcaChannel(config, &lfoValue, &modWheel, &bendWheel);
+            channels[i] = new OrcaChannel(config, &lfoValue[i % 4], &modWheel, &bendWheel);
         }
     }
     void ModWheel(double value) {
@@ -94,7 +98,10 @@ class OrcaDSP {
     }
 
     iplug::sample Tick() {
-        lfoValue = lfo->Tick();
+        for (int i = 0 ; i  < 4; i++) {
+            lfoValue[i] = lfo[i]->Tick();
+        }
+
         iplug::sample output = 0.0;
         int numChannels = (config->poly == 1) ? 1:8;
         for (int i=0;i<numChannels;i++) {

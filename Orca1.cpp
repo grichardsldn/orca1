@@ -21,7 +21,7 @@ Orca1::Orca1(const InstanceInfo& info)
 //  kParamLFOBend, // what is this?
   GetParam(kParamLfoBend)->InitDouble("LFOBend", 100., 0., 100.0, 0.01, "");
   
-  GetParam(kParamPitchMod)->InitDouble("Pitch mod", 0., 0., 12.0, 0.01, "");
+  GetParam(kParamPitchMod)->InitDouble("Pitch mod", 0., 0., 6.0, 0.01, "");
   
   GetParam(kParamPitchBend)->InitDouble("Pitch bend", 2.0, 0.0, 12.0, 0.01, "");
   
