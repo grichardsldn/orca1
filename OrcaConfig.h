@@ -4,6 +4,7 @@ struct OrcaConfig {
     // LFO
     double lfoRate;
     int lfoWaveform;
+    int lfoLinked;
   
     // global
     double volume;

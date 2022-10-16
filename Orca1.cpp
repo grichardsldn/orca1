@@ -18,10 +18,9 @@ Orca1::Orca1(const InstanceInfo& info)
 //  kParamLFORate,
   GetParam(kParamLfoRate)->InitDouble("LfoRate", 0.3, 0.05, 10.0, 0.01, "");
   
-//  kParamLFOBend, // what is this?
-  GetParam(kParamLfoBend)->InitDouble("LFOBend", 100., 0., 100.0, 0.01, "");
+  GetParam(kParamLfoLinked)->InitEnum("Linked", 0, {"Linked", "Separate"} );
   
-  GetParam(kParamPitchMod)->InitDouble("Pitch mod", 0., 0., 12.0, 0.01, "");
+  GetParam(kParamPitchMod)->InitDouble("Pitch mod", 0., 0., 6.0, 0.01, "");
   
   GetParam(kParamPitchBend)->InitDouble("Pitch bend", 2.0, 0.0, 12.0, 0.01, "");
   
@@ -123,9 +122,9 @@ Orca1::Orca1(const InstanceInfo& info)
                                                DEFAULT_STYLE.WithShowValue(false)));
     
     pGraphics->AttachControl(new IVRadioButtonControl(modControls.GetGridCell(1,2,5,EDirection::Horizontal,2).GetCentredInside(size * 2, size), kParamLfoWaveform, {}, "", DEFAULT_STYLE.WithShowLabel(false)));
+    
+    pGraphics->AttachControl(new IVRadioButtonControl(modControls.GetGridCell(5,2,5,EDirection::Horizontal,2).GetCentredInside(size * 2, size), kParamLfoLinked, {}, "", DEFAULT_STYLE.WithShowLabel(false)));
 
-    pGraphics->AttachControl(new IVKnobControl(modControls.GetGridCell(5,2,5).GetCentredInside(size), kParamLfoBend, "Bend",
-                                               DEFAULT_STYLE.WithShowValue(false)));
 
     // mixControls
     pGraphics->AttachControl(new IVKnobControl(mixControls.GetGridCell(0,1,5).GetCentredInside(size), kParamPulseMix, "Pulse",
@@ -207,6 +206,7 @@ void Orca1::ProcessBlock(sample** inputs, sample** outputs, int nFrames)
   // lfo
   config.lfoRate = GetParam(kParamLfoRate)->Value();
   config.lfoWaveform = GetParam(kParamLfoWaveform)->Value();
+  config.lfoLinked = GetParam(kParamLfoLinked)->Value();
 
   // env generator
   config.attack = GetParam(kParamAttack)->Value();

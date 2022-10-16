@@ -2,12 +2,12 @@
 
 class LFO {
     public:
-    LFO(const double* rate, const  int* samplerate, const int* waveform) {
+    LFO(double phase, const double* rate, const  int* samplerate, const int* waveform) {
         this->rate = rate; // hz
         this->samplerate = samplerate;
         this->waveform = waveform;
 
-        through = 0.0;
+        through = phase;
     }
     private:
 
