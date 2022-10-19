@@ -37,15 +37,28 @@ class Filter {
         pos += vel * *resonance;
         pos += impulse * (1.0 - *resonance) * 5.0;
         
+        if (pos > 1.0 ) {
+            vel -= 0.01;
+            if (vel < 0.0) {
+                vel = 0.0;
+            }
+        }
+        if (pos < -1.0 ) {
+            vel += 0.01;
+            if (vel > 0.0) {
+                vel = 0.0;
+            }
+        }
+        
         // end stops
-        if (pos > 2.0) {
-            pos = 2.0;
+        if (pos > 4.0) {
+            pos = 4.0;
             if (vel>0.0) {
                 vel = 0.0;
             }
         }
-        if (pos < -2.0) {
-            pos = -2.0;
+        if (pos < -4.0) {
+            pos = -4.0;
             if (vel<0.0) {
                 vel = 0.0;
             }
