@@ -38,13 +38,13 @@ class Filter {
         pos += impulse * (1.0 - *resonance) * 5.0;
         
         if (pos > 1.0 ) {
-            vel -= 0.01;
+            vel -= (0.01 * 48000.0 / *samplerate);
             if (vel < 0.0) {
                 vel = 0.0;
             }
         }
         if (pos < -1.0 ) {
-            vel += 0.01;
+            vel += (0.01 * 48000.0 / *samplerate);
             if (vel > 0.0) {
                 vel = 0.0;
             }
