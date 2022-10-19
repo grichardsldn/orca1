@@ -103,12 +103,13 @@ class OrcaChannel {
         }
     
         const double raw_tone = tonegen->Tick();
-        const double filtered = filter1->Tick(filter2->Tick(raw_tone));
-        
-        const double amped = config->ampType == 0 ? 
-            (filtered * envelope * velocity)
-             : (filtered * gateValue * velocity);
 
-        return amped;
+        const double amped = config->ampType == 0 ? 
+            (raw_tone * envelope * velocity * config->volume)
+             : (raw_tone * gateValue * velocity * config->volume);
+            
+        const double filtered = filter1->Tick(filter2->Tick(amped));
+        
+        return filtered;
     }
 };
