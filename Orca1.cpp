@@ -20,12 +20,12 @@ Orca1::Orca1(const InstanceInfo& info)
   
   GetParam(kParamLfoLinked)->InitEnum("LFO", 0, {"Linked", "Separate"} );
   
-  GetParam(kParamPitchMod)->InitDouble("Pitch mod", 0., 0., 6.0, 0.01, "");
+  GetParam(kParamPitchMod)->InitDouble("Pitch mod", 0.4, 0., 6.0, 0.01, "");
   
   GetParam(kParamPitchBend)->InitDouble("Pitch bend", 2.0, 0.0, 12.0, 0.01, "");
   
 //  kParamPulseWidth,
-  GetParam(kParamPulseWidthManual)->InitDouble("PulseWidthManual", .5, 0., 1.0, 0.01, "%");
+  GetParam(kParamPulseWidthManual)->InitDouble("PulseWidthManual", .5, 0., 0.7, 0.01, "%");
   
 //  kParamMixerPulse,
   GetParam(kParamPulseMix)->InitDouble("PulseMix", 1., 0., 1.0, 0.01, "",IParam::kFlagsNone, "Mix", IParam::ShapePowCurve(2.));
@@ -56,12 +56,12 @@ Orca1::Orca1(const InstanceInfo& info)
   // env generator
   GetParam(kParamAttack)->InitDouble("Attack", 50000., 200.0, 50000.0, 0.01, "",IParam::kFlagsNone, "ADSR", IParam::ShapePowCurve(4.));
   
-  GetParam(kParamDecay)->InitDouble("Decay", 1000., 200.0, 25000.0, 0.01, "",IParam::kFlagsNone, "ADSR", IParam::ShapePowCurve(4.));
-  GetParam(kParamSustain)->InitDouble("Sustain", 0.2, 0., 1.0, 0.01, "",IParam::kFlagsNone, "ADSR", IParam::ShapePowCurve(3.));
-  GetParam(kParamRelease)->InitDouble("Release", 300., 50.0, 20000.0, 0.01, "",IParam::kFlagsNone, "ADSR", IParam::ShapePowCurve(4.));
+  GetParam(kParamDecay)->InitDouble("Decay", 25000., 200.0, 25000.0, 0.01, "",IParam::kFlagsNone, "ADSR", IParam::ShapePowCurve(4.));
+  GetParam(kParamSustain)->InitDouble("Sustain", 1.0, 0., 1.0, 0.01, "",IParam::kFlagsNone, "ADSR", IParam::ShapePowCurve(3.));
+  GetParam(kParamRelease)->InitDouble("Release", 20000., 50.0, 20000.0, 0.01, "",IParam::kFlagsNone, "ADSR", IParam::ShapePowCurve(4.));
   
   GetParam(kParamTune)->InitDouble("Tune", 0., -1., 1., 0.05, "");
-  GetParam(kParamVolume)->InitDouble("Volume", 1.0,0.0,1.0,0.1,"");
+  GetParam(kParamVolume)->InitDouble("Volume", 0.5,0.0,1.0,0.1,"");
 
   // GetParam(kParamNoteGlideTime)->InitMilliseconds("Note Glide Time", 0., 0.0, 30.);
   // GetParam(kParamAttack)->InitDouble("Attack", 10., 1., 1000., 0.1, "ms", IParam::kFlagsNone, "ADSR", IParam::ShapePowCurve(3.));
