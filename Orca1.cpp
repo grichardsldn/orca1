@@ -6,10 +6,10 @@ Orca1::Orca1(const InstanceInfo& info)
 : Plugin(info, MakeConfig(kNumParams, kNumPresets))
 {
   GetParam(kParamPortamentoType)->InitEnum("P-Mode", 0, {"Auto", "Off", "On"} );
-  GetParam(kParamLfoWaveform)->InitEnum("LFOWaveform", 0, {"Triangle", "Square", "Step", "Warble"} );
+  GetParam(kParamLfoWaveform)->InitEnum("LFOWaveform", 0, {"Triangle", "Square", "Step", "Drift"} );
   GetParam(kParamRange)->InitEnum("Range", 0, {"16", "8", "4", "2"} );
   GetParam(kParamPulseSource)->InitEnum("Source", 0, {"LFO", "Manual", "Env"} );
-  GetParam(kParamSubType)->InitEnum("Sub", 0, {"1 Oct sq", "2 Oct sq", "2 oct pulse"} );
+  GetParam(kParamSubType)->InitEnum("Sub", 0, {"-1", "-2", "-2+"} );
   GetParam(kParamAmpType)->InitEnum("Amp", 0, {"Env", "Gate+Rel"} );
   GetParam(kParamPoly)->InitEnum("Mode", 0, {"Poly", "Mono"} );
 //  kParamPortamento,
@@ -18,7 +18,7 @@ Orca1::Orca1(const InstanceInfo& info)
 //  kParamLFORate,
   GetParam(kParamLfoRate)->InitDouble("LfoRate", 0.3, 0.05, 10.0, 0.01, "");
   
-  GetParam(kParamLfoLinked)->InitEnum("Linked", 0, {"Linked", "Separate"} );
+  GetParam(kParamLfoLinked)->InitEnum("LFO", 0, {"Linked", "Separate"} );
   
   GetParam(kParamPitchMod)->InitDouble("Pitch mod", 0., 0., 6.0, 0.01, "");
   
@@ -84,6 +84,8 @@ Orca1::Orca1(const InstanceInfo& info)
 
 //    pGraphics->EnableLiveEdit(true);
     pGraphics->LoadFont("Roboto-Regular", ROBOTO_FN);
+    const IText bigLabel {36, COLOR_WHITE, "Roboto-Regular", EAlign::Near, EVAlign::Top, 0};
+    
     const IRECT b = pGraphics->GetBounds().GetPadded(-10.f);
     // const IRECT lfoPanel = b.GetFromLeft(300.f).GetFromTop(200.f);
     // IRECT keyboardBounds = b.GetFromBottom(300);
@@ -100,8 +102,9 @@ Orca1::Orca1(const InstanceInfo& info)
     const IRECT filterControls = b.GetGridCell(3,1,5);
     const IRECT outputControls = b.GetGridCell(4,1,5);
     const int size = 50;
+
     // oscControls
-    pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(0,2,5).GetCentredInside(size), kParamRange, "Range"), kNoTag, "Range")->DisablePrompt(false);
+    pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(0,2,5).GetCentredInside(size), kParamRange, "Range", DEFAULT_STYLE.WithShowValue(false)), kNoTag, "")->DisablePrompt(true);
     pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(1,2,5).GetCentredInside(size), kParamPortamento, "Glide",
                                                DEFAULT_STYLE.WithShowValue(false)));
     pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(2,2,5).GetCentredInside(size), kParamPulseWidthManual, "Width",
@@ -114,29 +117,31 @@ Orca1::Orca1(const InstanceInfo& info)
     pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(7,2,5).GetCentredInside(size), kParamPitchMod, "Mod",
                                                DEFAULT_STYLE.WithShowValue(false)));
 
-    pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(8,2,5).GetCentredInside(size), kParamPoly, "Mode"), kNoTag, "Mode")->DisablePrompt(false);
-    
+    pGraphics->AttachControl(new IVRadioButtonControl(oscControls.GetGridCell(8,2,5).GetCentredInside(size), kParamPoly, {}, "", DEFAULT_STYLE.WithShowLabel(true)));
+   
         
     // modControls
-    pGraphics->AttachControl(new IVKnobControl(modControls.GetGridCell(0,2,5).GetCentredInside(size), kParamLfoRate, "Rate",
+    pGraphics->AttachControl(new IVKnobControl(modControls.GetGridCell(0,2,5).GetCentredInside(size), kParamLfoRate, "LFO",
                                                DEFAULT_STYLE.WithShowValue(false)));
     
     pGraphics->AttachControl(new IVRadioButtonControl(modControls.GetGridCell(1,2,5,EDirection::Horizontal,2).GetCentredInside(size * 2, size), kParamLfoWaveform, {}, "", DEFAULT_STYLE.WithShowLabel(false)));
     
     pGraphics->AttachControl(new IVRadioButtonControl(modControls.GetGridCell(5,2,5,EDirection::Horizontal,2).GetCentredInside(size * 2, size), kParamLfoLinked, {}, "", DEFAULT_STYLE.WithShowLabel(false)));
-
+    // the label
+    pGraphics->AttachControl(new ITextControl(modControls.GetGridCell(7,2,5,EDirection::Horizontal,2).GetCentredInside(size * 2, size), " ORCA-1", bigLabel));
+  
 
     // mixControls
     pGraphics->AttachControl(new IVKnobControl(mixControls.GetGridCell(0,1,5).GetCentredInside(size), kParamPulseMix, "Pulse",
                                                DEFAULT_STYLE.WithShowValue(false)));
     pGraphics->AttachControl(new IVKnobControl(mixControls.GetGridCell(1,1,5).GetCentredInside(size), kParamSawMix, "Saw",
                                                DEFAULT_STYLE.WithShowValue(false)));
-    pGraphics->AttachControl(new IVKnobControl(mixControls.GetGridCell(2,1,5).GetCentredInside(size), kParamSubMix, "Sub",
+    pGraphics->AttachControl(new IVKnobControl(mixControls.GetGridCell(3,1,5).GetCentredInside(size), kParamSubMix, "Sub",
                                                DEFAULT_STYLE.WithShowValue(false)));
-    pGraphics->AttachControl(new IVKnobControl(mixControls.GetGridCell(3,1,5).GetCentredInside(size), kParamNoiseMix, "Noise",
+    pGraphics->AttachControl(new IVKnobControl(mixControls.GetGridCell(2,1,5).GetCentredInside(size), kParamNoiseMix, "Noise",
                                                 DEFAULT_STYLE.WithShowValue(false)));
     
-    pGraphics->AttachControl(new IVRadioButtonControl(mixControls.GetGridCell(4,1,5).GetCentredInside(size), kParamSubType, {}, "", DEFAULT_STYLE.WithShowLabel(true)));
+    pGraphics->AttachControl(new IVRadioButtonControl(mixControls.GetGridCell(4,1,5).GetCentredInside(size), kParamSubType, {}, "", DEFAULT_STYLE.WithShowLabel(false)));
                  
     // env controls
     pGraphics->AttachControl(new IVKnobControl(envControls.GetGridCell(0,1,5).GetCentredInside(size), kParamAttack, "Attack",
@@ -173,7 +178,6 @@ Orca1::Orca1(const InstanceInfo& info)
                                                DEFAULT_STYLE.WithShowValue(false)));
    
 
-    
     // pGraphics->SetQwertyMidiKeyHandlerFunc([pGraphics](const IMidiMsg& msg) {
                            //                   //pGraphics->GetControlWithTag(kCtrlTagKeyboard)->As<IVKeyboardControl>()->SetNoteFromMidi(msg// // .NoteNumber(), msg.StatusMsg() == IMidiMsg::kNoteOn);
                              //              });
