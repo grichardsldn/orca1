@@ -103,16 +103,19 @@ Orca1::Orca1(const InstanceInfo& info)
     const IRECT outputControls = b.GetGridCell(4,1,5);
     const int size = 50;
 
+    const IVStyle YELLOW_STYLE = DEFAULT_STYLE.WithColor(kFG, COLOR_YELLOW);
+    const IVStyle WHITE_STYLE = DEFAULT_STYLE.WithColor(kFG, COLOR_WHITE);
+
     // oscControls
     pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(0,2,5).GetCentredInside(size), kParamRange, "Range", DEFAULT_STYLE.WithShowValue(false)), kNoTag, "")->DisablePrompt(true);
     pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(1,2,5).GetCentredInside(size), kParamPortamento, "Glide",
-                                               DEFAULT_STYLE.WithShowValue(false)));
+                                               YELLOW_STYLE.WithShowValue(false)));
     pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(2,2,5).GetCentredInside(size), kParamPulseWidthManual, "Width",
                                                DEFAULT_STYLE.WithShowValue(false)));
     pGraphics->AttachControl(new IVRadioButtonControl(oscControls.GetGridCell(3,2,5).GetCentredInside(size), kParamPulseSource, {}, "", DEFAULT_STYLE.WithShowLabel(true)));
     pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(5,2,5).GetCentredInside(size), kParamPitchBend, "Bend",
                                                DEFAULT_STYLE.WithShowValue(false)));
-    pGraphics->AttachControl(new IVRadioButtonControl(oscControls.GetGridCell(6,2,5).GetCentredInside(size), kParamPortamentoType, {}, "", DEFAULT_STYLE.WithShowLabel(true)));
+    pGraphics->AttachControl(new IVRadioButtonControl(oscControls.GetGridCell(6,2,5).GetCentredInside(size), kParamPortamentoType, {}, "", YELLOW_STYLE.WithShowLabel(true)));
    
     pGraphics->AttachControl(new IVKnobControl(oscControls.GetGridCell(7,2,5).GetCentredInside(size), kParamPitchMod, "Mod",
                                                DEFAULT_STYLE.WithShowValue(false)));
@@ -137,21 +140,21 @@ Orca1::Orca1(const InstanceInfo& info)
     pGraphics->AttachControl(new IVKnobControl(mixControls.GetGridCell(1,1,5).GetCentredInside(size), kParamSawMix, "Saw",
                                                DEFAULT_STYLE.WithShowValue(false)));
     pGraphics->AttachControl(new IVKnobControl(mixControls.GetGridCell(3,1,5).GetCentredInside(size), kParamSubMix, "Sub",
-                                               DEFAULT_STYLE.WithShowValue(false)));
+                                               YELLOW_STYLE.WithShowValue(false)));
     pGraphics->AttachControl(new IVKnobControl(mixControls.GetGridCell(2,1,5).GetCentredInside(size), kParamNoiseMix, "Noise",
                                                 DEFAULT_STYLE.WithShowValue(false)));
     
-    pGraphics->AttachControl(new IVRadioButtonControl(mixControls.GetGridCell(4,1,5).GetCentredInside(size), kParamSubType, {}, "", DEFAULT_STYLE.WithShowLabel(false)));
+    pGraphics->AttachControl(new IVRadioButtonControl(mixControls.GetGridCell(4,1,5).GetCentredInside(size), kParamSubType, {}, "", YELLOW_STYLE.WithShowLabel(false)));
                  
     // env controls
     pGraphics->AttachControl(new IVKnobControl(envControls.GetGridCell(0,1,5).GetCentredInside(size), kParamAttack, "Attack",
-                                               DEFAULT_STYLE.WithShowValue(false)));
+                                               WHITE_STYLE.WithShowValue(false)));
     pGraphics->AttachControl(new IVKnobControl(envControls.GetGridCell(1,1,5).GetCentredInside(size), kParamDecay, "Decay",
-                                               DEFAULT_STYLE.WithShowValue(false)));
+                                               WHITE_STYLE.WithShowValue(false)));
     pGraphics->AttachControl(new IVKnobControl(envControls.GetGridCell(2,1,5).GetCentredInside(size), kParamSustain, "Sustain",
-                                               DEFAULT_STYLE.WithShowValue(false)));
+                                               WHITE_STYLE.WithShowValue(false)));
     pGraphics->AttachControl(new IVKnobControl(envControls.GetGridCell(3,1,5).GetCentredInside(size), kParamRelease, "Release",
-                                               DEFAULT_STYLE.WithShowValue(false)));
+                                               WHITE_STYLE.WithShowValue(false)));
     
     // filterControls
     pGraphics->AttachControl(new IVKnobControl(filterControls.GetGridCell(0,2,5).GetCentredInside(size), kParamFilterFrequency, "Freq",
@@ -172,7 +175,7 @@ Orca1::Orca1(const InstanceInfo& info)
     // outputControls
     pGraphics->AttachControl(new IVKnobControl(outputControls.GetGridCell(0,2,5).GetCentredInside(size), kParamTune, "Tune",
                                                DEFAULT_STYLE.WithShowValue(false)));
-    pGraphics->AttachControl(new IVRadioButtonControl(outputControls.GetGridCell(1,2,5,EDirection::Horizontal,2).GetCentredInside(size * 2, size), kParamAmpType, {}, "", DEFAULT_STYLE.WithShowLabel(true)));
+    pGraphics->AttachControl(new IVRadioButtonControl(outputControls.GetGridCell(1,2,5,EDirection::Horizontal,2).GetCentredInside(size * 2, size), kParamAmpType, {}, "", YELLOW_STYLE.WithShowLabel(true)));
 
     pGraphics->AttachControl(new IVKnobControl(outputControls.GetGridCell(3,2,5).GetCentredInside(size), kParamVolume, "Volume",
                                                DEFAULT_STYLE.WithShowValue(false)));
