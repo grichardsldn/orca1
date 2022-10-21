@@ -1,6 +1,7 @@
 #include "Orca1.h"
 
 #include "IPlug_include_in_plug_src.h"
+#include "version.h"
 
 Orca1::Orca1(const InstanceInfo& info)
 : Plugin(info, MakeConfig(kNumParams, kNumPresets))
@@ -85,6 +86,7 @@ Orca1::Orca1(const InstanceInfo& info)
 //    pGraphics->EnableLiveEdit(true);
     pGraphics->LoadFont("Roboto-Regular", ROBOTO_FN);
     const IText bigLabel {36, COLOR_WHITE, "Roboto-Regular", EAlign::Near, EVAlign::Top, 0};
+    const IText smallLabel {18, COLOR_DARK_GRAY, "Roboto-Regular", EAlign::Near, EVAlign::Top, 0};
     
     const IRECT b = pGraphics->GetBounds().GetPadded(-10.f);
     // const IRECT lfoPanel = b.GetFromLeft(300.f).GetFromTop(200.f);
@@ -179,6 +181,9 @@ Orca1::Orca1(const InstanceInfo& info)
 
     pGraphics->AttachControl(new IVKnobControl(outputControls.GetGridCell(3,2,5).GetCentredInside(size), kParamVolume, "Volume",
                                                DEFAULT_STYLE.WithShowValue(false)));
+                                               
+    pGraphics->AttachControl(new ITextControl(outputControls.GetGridCell(5,2,5,EDirection::Horizontal,2).GetCentredInside(size).GetHShifted(-18.0).GetVShifted(31.0), ORCA1_VERSION, smallLabel));
+  
    
 
     // pGraphics->SetQwertyMidiKeyHandlerFunc([pGraphics](const IMidiMsg& msg) {
