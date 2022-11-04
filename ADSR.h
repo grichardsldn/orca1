@@ -32,51 +32,48 @@ class ADSR {
     }
 
     double Tick() {
-        double diff;
         switch(state) {
             case idle: 
                 output = 0.0;
             break;
 
             case attack:
-                diff = 1.0 - output;
-                output += diff * (*attackRate / (double)*samplerate / 200.0);
-                if (output > 0.99) {
-                    output = 0.99;
+                output += *attackRate / (double)*samplerate / 1000.0;
+                if (output > 1.0) {
+                    output = 1.0;
                     state = decay;
                 }
             break;
             case decay:
-                diff = output - *sustainLevel;
-                output -= diff * (*decayRate / (double)*samplerate / 200.0);
-                if (output < (*sustainLevel + 0.01)) {
-                    output = *sustainLevel + 0.01;
+                output -= *decayRate / (double)*samplerate / 1000.9;
+                if (output < *sustainLevel) {
+                    output = *sustainLevel;
                     state = sustain;
                 }
             break;
             case sustain:
-                output = *sustainLevel + 0.01;
+                output = *sustainLevel;
             break;
             case release:
+                // above the sustain level, fall at the greater of decay and release
                 double dropRate = *releaseRate;
-                diff = output;
-                
                 if (output > *sustainLevel && *decayRate > *releaseRate) { 
                     dropRate = *decayRate;
                 }
-                output -= diff * (dropRate / *samplerate / 200.0);
-                if (output < 0.01) {
+                output -= dropRate / (double)*samplerate / 1000.9;
+                if (output < 0) {
                     output = 0.0;
                     state = idle;
                 }
             break;
 
         }
-        return this->output;
+        const double attenuation = 1.0 - this->output;
+        return 1.0 / pow(10.0, attenuation * 2.0);
     };
 
     void Trigger() {
-        const double startLevel = 0.0;
+        const double startLevel = 0.2;
         if (output < startLevel) {
             output = startLevel; // start with something
         }
@@ -86,3 +83,6 @@ class ADSR {
         this->state = release;
     };
 };
+
+//         const double attenuation = 1.0 - envelope;
+//         const double enveloped = filtered / pow(10.0, attenuation * 2.0);
