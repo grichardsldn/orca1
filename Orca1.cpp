@@ -58,7 +58,7 @@ Orca1::Orca1(const InstanceInfo& info)
   GetParam(kParamAttack)->InitDouble("Attack", 50000., 200.0, 50000.0, 0.01, "",IParam::kFlagsNone, "ADSR", IParam::ShapePowCurve(4.));
   
   GetParam(kParamDecay)->InitDouble("Decay", 25000., 200.0, 25000.0, 0.01, "",IParam::kFlagsNone, "ADSR", IParam::ShapePowCurve(4.));
-  GetParam(kParamSustain)->InitDouble("Sustain", 1.0, 0., 1.0, 0.01, "",IParam::kFlagsNone, "ADSR", IParam::ShapePowCurve(3.));
+  GetParam(kParamSustain)->InitDouble("Sustain", 1.0, 0., 1.0, 0.01, "",IParam::kFlagsNone, "ADSR");
   GetParam(kParamRelease)->InitDouble("Release", 20000., 50.0, 20000.0, 0.01, "",IParam::kFlagsNone, "ADSR", IParam::ShapePowCurve(4.));
   
   GetParam(kParamTune)->InitDouble("Tune", 0., -1., 1., 0.05, "");
