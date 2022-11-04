@@ -69,7 +69,7 @@ class ADSR {
 
         }
         const double attenuation = 1.0 - this->output;
-        return 1.0 / pow(10.0, attenuation * 2.0);
+        return state == idle ? 0.0 : 1.0 / pow(20.0, attenuation * 2.0);
     };
 
     void Trigger() {
