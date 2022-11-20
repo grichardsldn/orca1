@@ -73,7 +73,7 @@ class ADSR {
     };
 
     void Trigger() {
-        const double startLevel = 0.2;
+        const double startLevel = 0.3;
         if (output < startLevel) {
             output = startLevel; // start with something
         }
