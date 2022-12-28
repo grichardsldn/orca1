@@ -90,6 +90,10 @@ class OrcaChannel {
             + (config->filterBend * *bendWheel / 12.0)
         ;
 
+        if (filterOctave > 8.0) {
+            filterOctave = 8.0;
+        }
+
         switch (config->pulseSource ) {
             case 0:// lfo
                 pulseWidth = config->pulseWidthManual * ((*lfo + 1.0) / 2.0);
@@ -108,8 +112,13 @@ class OrcaChannel {
             (raw_tone * envelope * velocity * config->volume)
              : (raw_tone * gateValue * velocity * config->volume);
             
-        const double filtered = filter1->Tick(filter2->Tick(amped));
-        
+        double filtered;   
+        if (config->filterFrequency != 8.0) { ///max
+            filtered = filter1->Tick(filter2->Tick(amped));
+        } else {
+            // bypass filter
+            filtered = amped;
+        }
         return filtered;
     }
 };
