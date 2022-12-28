@@ -3,6 +3,7 @@
 #include "OrcaChannel.h"
 #include "LFO.h"
 #include "ADSR.h"
+#include "Protector.h"
 
 #define NUM_CHANNELS (8)
 class OrcaDSP {
@@ -15,6 +16,7 @@ class OrcaDSP {
     LFO* lfo[4];
     double modWheel = 0.0;
     double bendWheel = 0.0;
+    Protector protector;
 
     // state
     double lfoValue[4];
@@ -114,7 +116,7 @@ class OrcaDSP {
         for (int i=0;i<numChannels;i++) {
             output += channels[i]->Tick();
         }
-        return output;
+        return protector.Tick(output);
     };
 
     private:
