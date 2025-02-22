@@ -6,7 +6,7 @@
 Orca1::Orca1(const InstanceInfo& info)
 : Plugin(info, MakeConfig(kNumParams, kNumPresets))
 {
-  GetParam(kParamPortamentoType)->InitEnum("P-Mode", 0, {"Auto", "Off", "On"} );
+  GetParam(kParamPortamentoType)->InitEnum("P-Mode", 1, {"Auto", "Off", "On"} );
   GetParam(kParamLfoWaveform)->InitEnum("LFOWaveform", 0, {"Triangle", "Square", "Step", "Drift"} );
   GetParam(kParamRange)->InitEnum("Range", 0, {"16", "8", "4", "2"} );
   GetParam(kParamPulseSource)->InitEnum("Source", 0, {"LFO", "Manual", "Env"} );
